@@ -15,28 +15,26 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 
 public class Main extends Application  {
-    static GranularModel Grandad = new GranularModel();
+    Synth synth = new Synth();
 
-    //TEST
-    //TEASTAA
     @Override
     public void start(Stage primaryStage) {
         RunnableThread T1 = new RunnableThread("T1");
         T1.start();
-        Controller Controller = new Controller(Grandad);
-        View view = new View(Grandad, Controller);
+
+        Controller Controller = new Controller(synth);
+        View view = new View(synth, Controller);
         primaryStage.setTitle("Grandaddy");
         primaryStage.setScene(new Scene(view.asParent(), 800, 400));
         Controller.setView(view);
         primaryStage.show();
 
-
+        RunnableThread T2 = new RunnableThread("T2");
+        T2.start();
     }
 
     public static void main (String[]args) {launch (args);}{
-        RunnableThread T2 = new RunnableThread("T2");
-        T2.start();
-        GspModel model = new GspModel();
+
     }
 }
 

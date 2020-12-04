@@ -14,7 +14,9 @@ public class RunnableThread implements Runnable {
 
         try {
             while (bingo) {
-                System.out.println("bingo");
+                for (int i = 1; i < 4; i++) {
+                    System.out.println(threadName + "count: " + i);
+                }
                 Thread.sleep(50);
             }
             }catch(InterruptedException e){

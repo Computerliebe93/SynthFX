@@ -1,25 +1,13 @@
 package sample;
 
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import net.beadsproject.beads.core.AudioContext;
-import net.beadsproject.beads.data.Sample;
-import net.beadsproject.beads.ugens.GranularSamplePlayer;
-import net.beadsproject.beads.ugens.SamplePlayer;
-import net.beadsproject.beads.ugens.Static;
 
-import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import java.awt.*;
-import java.util.ArrayList;
 
 public class Controller {
-    GranularModel model;
+    Synth model;
 
 
-    public Controller(GranularModel model) {
+    public Controller(Synth model) {
         this.model = model;
     }
 

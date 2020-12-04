@@ -11,9 +11,14 @@ import javafx.scene.layout.GridPane;
 import java.util.ArrayList;
 
 public class View {
-    GranularModel model;
+    Synth model;
     Controller control;
 
+    public View(Synth model, Controller control){
+        this.model = model;
+        this.control = control;
+        createAndConfigure();
+    }
     private GridPane StartView;
 
     // Labels
@@ -30,11 +35,7 @@ public class View {
     ComboBox<String> selectLoopComb = new ComboBox(FXCollections.observableArrayList(loopTypes));
 
 
-    public View(GranularModel model, Controller control){
-        this.model = model;
-        this.control = control;
-        createAndConfigure();
-    }
+
 
     private void createAndConfigure(){
         StartView = new GridPane();
