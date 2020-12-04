@@ -17,7 +17,7 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 public class Main extends Application  {
     static GranularModel Grandad = new GranularModel();
 
-
+    //TEST
     @Override
     public void start(Stage primaryStage) {
         RunnableThread T1 = new RunnableThread("T1");

@@ -14,7 +14,7 @@ boolean engine = true;
         Sample sourceSample = null;
         boolean sampleReady = false;
         try {
-            sourceSample = new Sample("bells.wav");
+            sourceSample = new Sample("Ring02.wav");
             sampleReady = true;
         } catch (Exception e) {
             System.out.println(e.getMessage());
