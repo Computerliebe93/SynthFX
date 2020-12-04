@@ -18,6 +18,7 @@ public class Main extends Application  {
     static GranularModel Grandad = new GranularModel();
 
     //TEST
+    //TEASTAA
     @Override
     public void start(Stage primaryStage) {
         RunnableThread T1 = new RunnableThread("T1");
