@@ -31,12 +31,15 @@ boolean engine = true;
         Synth synth = new Synth();
         MidiKeyboard midiKeyboard = new MidiKeyboard(synth);
         gsp.setLoopType(SamplePlayer.LoopType.LOOP_FORWARDS);
+
         ac.start();
 
         // while-loop to configure modifiers live
+
+
          while (sampleReady) {
-/*
-            // knobs
+
+            // KNOBS
 
             // Pitch
             gsp.setPitch(new Static(ac, (synth.getKnobValue(1) * (0.1f) / (6.3f))));
@@ -70,7 +73,7 @@ boolean engine = true;
             // Random pan
             gsp.setRandomPan(new Static(ac, synth.getKnobValue(7) * (0.3f)));
 
-            // Pads
+            // PADS
             switch (synth.getPadValue()) {
                 case 44:
                     System.out.println("44 has been triggered");
@@ -101,8 +104,6 @@ boolean engine = true;
                     synth.setPadValue(0);
                     break;
             }
-        */
-             gsp.setGrainInterval(new Static(ac, 1));
          }
     }
 }

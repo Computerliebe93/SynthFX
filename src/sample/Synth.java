@@ -47,4 +47,5 @@ public class Synth {
     public void setPadValue(int i){
         padValues[0] = i;
     }
+
 }
