@@ -1,4 +1,5 @@
 package sample;
+import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
@@ -6,20 +7,27 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.GridPane;
-ª
+
+import java.util.ArrayList;
+
 public class View {
     GranularModel model;
     Controller control;
 
     private GridPane StartView;
 
+    // Labels
     Label sampleNameLbl = new Label("Sample name:");
 
+    // Buttons
     Button loadBtn = new Button("Load sample");
+    Button exitBtn = new Button("Exit");
 
-
+    // Textarea
     TextArea sampleName = new TextArea();
-    ComboBox<String> selectLoopComb = new ComboBox();
+
+    String loopTypes [] = {"Forwards", "Backwards"};
+    ComboBox<String> selectLoopComb = new ComboBox(FXCollections.observableArrayList(loopTypes));
 
 
     public View(GranularModel model, Controller control){
@@ -36,24 +44,21 @@ public class View {
         StartView.setVgap(3);
         StartView.setHgap(10);
 
+        // Sample
         StartView.add(loadBtn, 0, 0);
-
         sampleName.setMaxHeight(2);
         sampleName.setMinWidth(90);
         StartView.add(sampleName,1,0, 2, 1);
 
+        // Loop
         selectLoopComb.setMinWidth(90);
         StartView.add(selectLoopComb, 0, 1);
+        selectLoopComb.getSelectionModel().selectFirst();
 
+        // Exit
+        StartView.add(exitBtn, 20, 20);
 
-        /*
-        loopType.setMaxHeight(10);
-        loopType.setMaxWidth(90);
-        StartView.add(loopType, 10,20); */
     }
-
-
-
     public Parent asParent() {
         return StartView;
     }
