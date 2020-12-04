@@ -35,7 +35,7 @@ boolean engine = true;
 
         // while-loop to configure modifiers live
          while (sampleReady) {
-
+/*
             // knobs
 
             // Pitch
@@ -101,7 +101,9 @@ boolean engine = true;
                     synth.setPadValue(0);
                     break;
             }
-        }
+        */
+             gsp.setGrainInterval(new Static(ac, 1));
+         }
     }
 }
 

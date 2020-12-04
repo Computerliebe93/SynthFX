@@ -6,21 +6,15 @@ public class RunnableThread implements Runnable {
     private String threadName;
 
     RunnableThread(String name) {
+
         threadName = name;
     }
 
     @Override
     public void run() {
 
-        try {
-            while (bingo) {
-                for (int i = 1; i < 4; i++) {
-                    System.out.println(threadName + "count: " + i);
-                }
-                Thread.sleep(50);
-            }
-            }catch(InterruptedException e){
-        }
+        GspModel gsp = new GspModel();
+
     } public void start(){
         System.out.println("Starting" + threadName);
         if (t == null){
