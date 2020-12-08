@@ -3,6 +3,9 @@ package sample;
 import javafx.application.Platform;
 import javafx.event.Event;
 import javafx.scene.control.Label;
+import javafx.stage.Window;
+
+import java.io.File;
 
 
 public class Controller {
@@ -20,16 +23,20 @@ public class Controller {
     }
 
 
+
+
     public  void setView(View view) {
         view.exitBtn.setOnAction(e -> Platform.exit());
         view.exitBtn.setOnAction(e -> System.exit(0));
 
+        // Pitch
         view.updatePlease.setOnAction(e ->{
             view.pitchValue.setText(String.valueOf(model.getKnobValue(1)));
         });
 
         view.printPitch.setOnAction(e -> {
             System.out.println("Synth pitch is set to: " + model.getKnobValue(1));
+            System.out.println(model.getSample());
 
         });
 
@@ -38,6 +45,14 @@ public class Controller {
 
             view.pitchValue.setText(view.pitchInput.getValue().toString());
             setPitchValue(view.pitchValue);
+        });
+
+        // Sample
+        view.sampleLoadbtn.setOnAction( e ->{
+            model.getSample();
+            Window primaryStage = null;
+            File selectedFile = model.loadSample().showOpenDialog(primaryStage);
+            model.setSample(selectedFile);
         });
 
         view.grainSizeBtn.setOnAction(e -> view.grainSizeValue.setText(view.grainSizeInput.getText()));

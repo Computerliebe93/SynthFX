@@ -1,16 +1,27 @@
 package sample;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
+import javafx.scene.media.Media;
+import javafx.scene.media.MediaPlayer;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import net.beadsproject.beads.core.AudioContext;
 import net.beadsproject.beads.data.Sample;
 import net.beadsproject.beads.ugens.GranularSamplePlayer;
 import net.beadsproject.beads.ugens.SamplePlayer;
 import net.beadsproject.beads.ugens.Static;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.Random;
 
 
 public class Synth {
-    float[] knobValues = new float[] {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    float[] knobValues = new float[9];
     int[] padValues = new int[]{0};
     int[] keyValues = new int[120];
+    String samplePath;
+
 
 
     public Synth() {
@@ -64,22 +75,60 @@ public class Synth {
         }
     }
 
-   public float getKeysValue(int keyTransmitter) {
+    public float getKeysValue(int keyTransmitter) {
             return keyValues[keyTransmitter];
     }
     public void setKeysValue(int keyTransmitter, int value){
         keyValues[keyTransmitter] = value;
     }
+
+    public FileChooser loadSample(){
+
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().addAll(
+                new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.acac")
+        );
+
+        return fileChooser;
+    }
+
+    public String setSample(File file){
+        String path = null;
+        try {
+            path = file.getCanonicalPath();
+            samplePath = path;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        System.out.println(path);
+        return path;
+    }
+
+    public String getSample(){
+        return samplePath;
+    }
 }
+
+
 class Gsp {
     public Gsp() {
         AudioContext ac = new AudioContext();
         // load the source sample from a file
-        Sample sourceSample = null;
+        Sample sourceSample  = null;
         boolean sampleReady = false;
+        // instantiate synth and midikeyboard
+        Synth synth = new Synth();
+        MidiKeyboard midiKeyboard = new MidiKeyboard(synth);
+
         try {
-            sourceSample = new Sample("Ring02.wav");
-            sampleReady = true;
+            if (synth.getSample() != null){
+            sourceSample = new Sample(synth.getSample());
+            sampleReady = true;}
+            else{
+                sourceSample = new Sample("Ring02.wav");
+                sampleReady = true;
+            }
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -91,9 +140,7 @@ class Gsp {
         // connect gsp to ac
         ac.out.addInput(gsp);
 
-        // instantiate synth and midikeyboard
-        Synth synth = new Synth();
-        MidiKeyboard midiKeyboard = new MidiKeyboard(synth);
+
 
         // while-loop to configure modifiers live
         do {
