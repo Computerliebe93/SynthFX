@@ -1,10 +1,5 @@
 package sample;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
 import net.beadsproject.beads.core.AudioContext;
 import net.beadsproject.beads.data.Sample;
 import net.beadsproject.beads.ugens.GranularSamplePlayer;
@@ -18,15 +13,15 @@ import java.util.Random;
 
 public class Synth {
     float[] knobValues = new float[9];
-    int[] padValues = new int[]{0};
-    int[] keyValues = new int[120];
+    int[] padValues = new int[] {0};
+    int[] keyValues = new int[] {0};
     String samplePath;
-
 
 
     public Synth() {
     }
 
+    // KNOB
     public void receiveKnobMidi(byte[] a) {
         if (a[1] > 0 && a[1] <= knobValues.length) {
             knobValues[a[1]] = a[2];
@@ -48,6 +43,7 @@ public class Synth {
         knobValues[knobTransmitter] = value;
     }
 
+    // PAD
     public void receivePadMidi(byte[] a) {
         if (a[1] >= 0 && a[1] < 8) {
             System.out.println(a[1]);
@@ -55,9 +51,9 @@ public class Synth {
             System.out.println("Active pad is " + padValues[0]);
 
         } //else {
-            //System.out.println("Something went wrong");
-        }
-     //}
+        //System.out.println("Something went wrong");
+    }
+    //}
 
     public int getPadValue() {
         return padValues[0];
@@ -66,32 +62,26 @@ public class Synth {
         padValues[0] = i;
     }
 
-    public void receiveKeysMidi(byte[] a){
-        if (a[1] > 0 && a[1] <= keyValues.length) {
-            keyValues[a[1]] = a[1];
-            System.out.println("Key " + a[1] + " value is set to " + keyValues[a[1]]);
-        } else {
-            System.out.println("Something went wrong");
-        }
+    // KEYS
+    public void receiveKeysMidi(byte[] a) {
+        keyValues[0] = a[1];
+        System.out.println("Key value is set to " + a[1]);
     }
 
-    public float getKeysValue(int keyTransmitter) {
-            return keyValues[keyTransmitter];
-    }
-    public void setKeysValue(int keyTransmitter, int value){
-        keyValues[keyTransmitter] = value;
-    }
 
+    public float getKeysValue() {
+        return keyValues[0];
+    }
+    public void setKeysValue( int value){
+        keyValues[0] = value;
+    }
     public FileChooser loadSample(){
-
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.acac")
         );
-
         return fileChooser;
     }
-
     public String setSample(File file){
         String path = null;
         try {
@@ -103,31 +93,20 @@ public class Synth {
         System.out.println(path);
         return path;
     }
-
     public String getSample(){
         return samplePath;
     }
 }
 
-
 class Gsp {
     public Gsp() {
         AudioContext ac = new AudioContext();
         // load the source sample from a file
-        Sample sourceSample  = null;
+        Sample sourceSample = null;
         boolean sampleReady = false;
-        // instantiate synth and midikeyboard
-        Synth synth = new Synth();
-        MidiKeyboard midiKeyboard = new MidiKeyboard(synth);
-
         try {
-            if (synth.getSample() != null){
-            sourceSample = new Sample(synth.getSample());
-            sampleReady = true;}
-            else{
-                sourceSample = new Sample();
-                sampleReady = true;
-            }
+            sourceSample = new Sample("Ring02.wav");
+            sampleReady = true;
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
@@ -139,18 +118,26 @@ class Gsp {
         // connect gsp to ac
         ac.out.addInput(gsp);
 
-
+        // instantiate synth and midikeyboard
+        Synth synth = new Synth();
+        MidiKeyboard midiKeyboard = new MidiKeyboard(synth);
+        ac.start();
 
         // while-loop to configure modifiers live
-        do {
+        while (sampleReady){
             // KNOBS //
 
             // Pitch (Knob 1)
+            if(synth.getKeysValue() > 0){
+                synth.setKnobValue(1, (int) synth.getKeysValue());
+                synth.setKeysValue(0);
+            }
+
             if (synth.getKnobValue(1) > 0) {
                 gsp.setPitch(new Static(ac, (synth.getKnobValue(1) * (0.1f) / (6.3f))));
-                //gsp.setPitch(new Static(ac, (float) (synth.getKeysValue(1) * (0.1f) / (63.5))));
-                synth.setKeysValue(48, 0);
-            } else {
+            }
+
+            else if (synth.getKnobValue(1) == 0){
                 gsp.setPitch(new Static(1));
             }
 
@@ -165,8 +152,8 @@ class Gsp {
             if (synth.getKnobValue(3) > 0) {
                 gsp.setGrainInterval(new Static(ac, (synth.getKnobValue(3) * (4))));
             } else if (synth.getKnobValue(3) == 0) {
-                    synth.setKnobValue(3, 63);
-                }
+                synth.setKnobValue(3, 63);
+            }
 
             // Random (Knob 4)
             if (synth.getKnobValue(4) == 0) {
@@ -182,15 +169,15 @@ class Gsp {
                 int min = 1;
                 spray = random.nextInt((int) (max - min) * 10000);
             }
-                else {
+            else {
                 spray = 100;
             }
-                // Loop start/end
-                gsp.setLoopStart(new Static(((synth.getKnobValue(5)) * spray)));
-                if (synth.getKnobValue(5) > synth.getKnobValue(6)) {
-                    synth.setKnobValue(5, (int) synth.getKnobValue(6) - 1);
-                }
-                gsp.setLoopEnd(new Static((synth.getKnobValue(6)) * (spray)));
+            // Loop start/end
+            gsp.setLoopStart(new Static(((synth.getKnobValue(5)) * spray)));
+            if (synth.getKnobValue(5) > synth.getKnobValue(6)) {
+                synth.setKnobValue(5, (int) synth.getKnobValue(6) - 1);
+            }
+            gsp.setLoopEnd(new Static((synth.getKnobValue(6)) * (spray)));
 
 
             // PADS
@@ -218,15 +205,8 @@ class Gsp {
                     gsp.reset();
                     synth.setPadValue(10);
                     break;
-
-                case 4:
-                    System.out.println("4 has been triggered");
-                    gsp.start();
-                    ac.start();
-                    break;
             }
-            ac.start();
-        } while (sampleReady);
+        }
     }
 }
 
