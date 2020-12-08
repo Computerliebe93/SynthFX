@@ -15,7 +15,7 @@ public class Main extends Application  {
         View view = new View(synth, Controller);
 
         primaryStage.setTitle("Grandaddy");
-        primaryStage.setScene(new Scene(view.asParent(), 800, 400));
+        primaryStage.setScene(new Scene(view.asParent(), 800, 600));
         Controller.setView(view);
         primaryStage.show();
 
