@@ -84,7 +84,6 @@ public class Synth {
 
     public FileChooser loadSample(){
 
-
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.acac")
@@ -126,7 +125,7 @@ class Gsp {
             sourceSample = new Sample(synth.getSample());
             sampleReady = true;}
             else{
-                sourceSample = new Sample("Ring02.wav");
+                sourceSample = new Sample();
                 sampleReady = true;
             }
         } catch (Exception e) {

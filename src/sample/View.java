@@ -75,16 +75,12 @@ public class View {
     ComboBox<String> selectLoopComb = new ComboBox(FXCollections.observableArrayList(loopTypes));
 
 
-
-
-
     private void createAndConfigure(){
         Header = new HBox();
         Grid = new GridPane();
         StartView = new BorderPane();
         StartView.setTop(Header);
         StartView.setCenter(Grid);
-
 
 
        /* StartView.setMinSize(00, 200);

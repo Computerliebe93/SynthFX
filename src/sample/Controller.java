@@ -22,9 +22,6 @@ public class Controller {
 
     }
 
-
-
-
     public  void setView(View view) {
         view.exitBtn.setOnAction(e -> Platform.exit());
         view.exitBtn.setOnAction(e -> System.exit(0));
