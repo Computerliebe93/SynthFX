@@ -7,7 +7,6 @@ import javafx.stage.Stage;
 public class Main extends Application  {
     Synth synth = new Synth();
 
-
     @Override
     public void start(Stage primaryStage) {
 

@@ -13,7 +13,7 @@ public class RunnableThread implements Runnable {
     @Override
     public void run() {
 
-        GspModel gsp = new GspModel();
+        Gsp gspSynth = new Gsp();
 
     } public void start(){
         System.out.println("Starting" + threadName);

@@ -40,15 +40,17 @@ public class MidiKeyboard {
             byte[] aMsg = msg.getMessage();
             for (int i = 0; i < msg.getLength(); i++) {
                 // set == to midi-transmitter
-                if(aMsg[0] == -80){
+                if (aMsg[0] == -80) {
                     synth.receiveKnobMidi(aMsg);
                 }
-                if (aMsg[0] == -112){
+                if (aMsg[0] == -64) {
                     synth.receivePadMidi(aMsg);
                 }
-                //  System.out.println(aMsg[i]);
+                if (aMsg[0] == -112)
+                    synth.receiveKeysMidi(aMsg);
             }
         }
+        //System.out.println(aMsg[i]);
 
         public void close() {
         }
