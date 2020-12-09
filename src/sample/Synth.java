@@ -1,6 +1,7 @@
 package sample;
 import javafx.stage.FileChooser;
 import net.beadsproject.beads.core.AudioContext;
+import net.beadsproject.beads.core.UGen;
 import net.beadsproject.beads.data.Sample;
 import net.beadsproject.beads.ugens.GranularSamplePlayer;
 import net.beadsproject.beads.ugens.SamplePlayer;
@@ -10,6 +11,13 @@ import java.io.IOException;
 import java.util.Random;
 
 public class Synth implements Runnable{
+    boolean pitchToggle = false;
+    boolean grainSizeToggle = false;
+    boolean grainIntervalToggle = false;
+    boolean randomToggle = false;
+    boolean startPointToggle = false;
+    boolean endPointToggle = false;
+    boolean sprayToggle = false;
     private float[] knobValues = new float[9];
     private int[] padValues = new int[] {0};
     private int[] keyValues = new int[] {0};
@@ -115,7 +123,7 @@ public class Synth implements Runnable{
         // instantiate synth and midikeyboard
 
         try {
-            sourceSample = new Sample("Ring02.wav");
+            sourceSample = new Sample("Alarm05.wav");
             sampleReady = true;
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -133,12 +141,15 @@ public class Synth implements Runnable{
         while (sampleReady){
             // KNOBS //
             // Pitch (Knob 1)
-            if(getKeysValue() > 0){
+            if(!pitchToggle){
+
+            }
+            if(getKeysValue() > 0 && pitchToggle == true){
                 setKnobValue(1, (int) getKeysValue());
                 setKeysValue(0);
             }
 
-            if (getKnobValue(1) > 0) {
+            if (getKnobValue(1) > 0 && pitchToggle == true) {
                 gsp.setPitch(new Static(ac, (float) (getKnobValue(1) * (pitchOffset))));
             }
 

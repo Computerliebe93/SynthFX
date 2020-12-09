@@ -16,6 +16,14 @@ public class Controller {
         view.exitBtn.setOnAction(e -> Platform.exit());
         view.exitBtn.setOnAction(e -> System.exit(0));
         // Pitch
+        view.pitchOnBtn.setOnAction(e ->{
+            if(view.pitchOnBtn.isSelected()){
+                model.pitchToggle = true;
+            }
+            else if (!view.pitchOnBtn.isSelected()){
+                model.pitchToggle = false;
+            }
+        });
         view.updatePlease.setOnAction(e ->{
             view.pitchValueLbl.setText(String.valueOf(model.getKnobValue(1)));
         });

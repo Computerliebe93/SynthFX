@@ -30,36 +30,43 @@ public class View {
     // Pitch
     Label pitchNameLbl = new Label("Pitch");
     Label pitchValueLbl = new Label("0");
+    ToggleButton pitchOnBtn = new ToggleButton("Pitch On");
     Button pitchBtn = new Button("Set Pitch");
     Spinner<Integer> pitchInput = new Spinner(0, 127, 0);
     // GrainSize
     Label grainSizeNameLbl = new Label("GrainSize");
     Label grainSizeValueLbl = new Label("0");
+    Button grainSizeOnBtn = new Button("Grain Size On");
     Button grainSizeBtn = new Button("Set Grain");
     Spinner<Integer> grainSizeInput = new Spinner(0, 127, 0);
     // GrainInterval
     Label grainIntervalNameLbl = new Label("GrainInterval");
     Label grainIntervalValueLbl = new Label("0");
+    Button grainIntOnBtn = new Button("Grain Interval On");
     Button grainIntervalBtn = new Button("Set Grain Interval");
     Spinner<Integer> grainIntervalInput = new Spinner(0, 127, 0);
-    // GrainInterval
+    // Randomness
     Label randomnessNameLbl = new Label("Randomness");
     Label randomnessValueLbl = new Label("0");
+    Button randomOnBtn = new Button("Random On");
     Button randomnessBtn = new Button("Set Randomness");
     Spinner<Integer> randomnessInput = new Spinner(0, 127, 0);
-    // StartLoop
+    // Start point
     Label startNameLbl = new Label("Start");
     Label startValueLbl = new Label("0");
+    Button starPointOn = new Button("Start point On");
     Button startBtn = new Button("Set Start");
     Spinner<Integer> startInput = new Spinner(0, 127, 0);
-    // EndLoop
+    // End point
     Label endNameLbl = new Label("End");
     Label endValueLbl = new Label("0");
+    Button endPointOn = new Button("End point On");
     Button endBtn = new Button("Set End");
     Spinner<Integer> endInput = new Spinner(0, 127, 0);
     // Spray
     Label sprayNameLbl = new Label("Spray");
     Label sprayValueLbl = new Label("0");
+    Button sprayOnBtn = new Button("Spray On");
     Button sprayBtn = new Button("Set Spray");
     Spinner<Integer> sprayInput = new Spinner(0, 127, 0);
 
@@ -96,6 +103,7 @@ public class View {
         pitchInput.setMaxSize(60, 20);
         pitchInput.setEditable(true);
         Grid.add(pitchInput, 2, 6);
+        Grid.add(pitchOnBtn,1, 6);
         Grid.add(pitchBtn, 2, 7);
         Grid.add(pitchValueLbl, 3, 6);
         // GrainSize
