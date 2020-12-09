@@ -7,6 +7,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import net.beadsproject.beads.ugens.GranularSamplePlayer;
 
 public class View {
     Synth model;
@@ -44,7 +45,7 @@ public class View {
     // GrainInterval
     Label randomnessNameLbl = new Label("Randomness");
     Label randomnessValueLbl = new Label("0");
-    Button randomnessBtn = new Button("Set randomness");
+    Button randomnessBtn = new Button("Set Randomness");
     Spinner<Integer> randomnessInput = new Spinner(0, 127, 0);
     // StartLoop
     Label startNameLbl = new Label("Start");
@@ -55,12 +56,17 @@ public class View {
     Label endNameLbl = new Label("End");
     Label endValueLbl = new Label("0");
     Button endBtn = new Button("Set End");
-    Spinner<Integer>  endInput = new Spinner(0, 127, 0);
+    Spinner<Integer> endInput = new Spinner(0, 127, 0);
+    // Spray
+    Label sprayNameLbl = new Label("Spray");
+    Label sprayValueLbl = new Label("0");
+    Button sprayBtn = new Button("Set Spray");
+    Spinner<Integer> sprayInput = new Spinner(0, 127, 0);
 
     // L0rt
     Button updatePlease = new Button("UPDATE PLEASE");
     Button printPitch = new Button("Print Pitch");
-    String loopTypes [] = {"Forwards", "Backwards"};
+    String loopTypes [] = {"Forwards", "Backwards", "Alternating", "Reset"};
     ComboBox<String> selectLoopComb = new ComboBox(FXCollections.observableArrayList(loopTypes));
 
     private void createAndConfigure(){
@@ -127,6 +133,14 @@ public class View {
         Grid.add(endInput, 5, 9);
         Grid.add(endBtn, 5, 10);
         Grid.add(endValueLbl, 6, 9);
+        // Spray
+        Grid.add(sprayNameLbl, 5, 11);
+        sprayInput.setMaxSize(60,20);
+        sprayInput.setEditable(true);
+        Grid.add(sprayInput,5,12);
+        Grid.add(sprayBtn,5,13);
+        Grid.add(sprayValueLbl, 6,12);
+
         // Weird stuff
         Grid.add(updatePlease, 20, 20);
         Grid.add(printPitch, 19,20);

@@ -25,6 +25,7 @@ public class Synth implements Runnable{
     double spray;
     final double sprayOffset = 10000;
     final double loopOffset = 100;
+    final int padValueDummy = 10;
 
     public void setController(Controller controller){
         this.controller = controller;
@@ -130,8 +131,6 @@ public class Synth implements Runnable{
 
         // while-loop to configure modifiers live
         while (sampleReady){
-
-
             // KNOBS //
             // Pitch (Knob 1)
             if(getKeysValue() > 0){
@@ -174,7 +173,6 @@ public class Synth implements Runnable{
                 int min = 1;
                 spray = random.nextInt((int) ((max - min) * sprayOffset));
             }
-
             else {
                 spray = loopOffset;
             }
@@ -190,25 +188,25 @@ public class Synth implements Runnable{
                 case 0:
                     System.out.println("0 has been triggered");
                     gsp.setLoopType(SamplePlayer.LoopType.LOOP_FORWARDS);
-                    setPadValue(10);
+                    setPadValue(padValueDummy);
                     break;
 
                 case 1:
                     System.out.println("1 has been triggered");
                     gsp.setLoopType(SamplePlayer.LoopType.LOOP_BACKWARDS);
-                    setPadValue(10);
+                    setPadValue(padValueDummy);
                     break;
 
                 case 2:
                     System.out.println("2 has been triggered");
                     gsp.setLoopType(SamplePlayer.LoopType.LOOP_ALTERNATING);
-                    setPadValue(10);
+                    setPadValue(padValueDummy);
                     break;
 
                 case 3:
                     System.out.println("3 has been triggered");
                     gsp.reset();
-                    setPadValue(10);
+                    setPadValue(padValueDummy);
                     break;
             }
         }

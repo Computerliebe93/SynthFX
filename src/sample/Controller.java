@@ -54,33 +54,38 @@ public class Controller {
             view.endValueLbl.setText(view.endInput.getValue().toString());
             model.setKnobValue(6, view.endInput.getValue());
         });
+        //Spray
+        view.sprayBtn.setOnAction(e -> {
+            view.sprayValueLbl.setText(view.sprayInput.getValue().toString());
+            model.setKnobValue(7, view.sprayInput.getValue());
+        });
+        // Loop type
+        view.selectLoopComb.setOnAction(e -> {
+            switch(view.selectLoopComb.getValue()) {
+                case "Forwards":
+                    model.setPadValue(0);
+                    System.out.println("Forwards");
+                    model.setPadValue(model.padValueDummy);
+                    break;
+                case "Backwards":
+                    model.setPadValue(1);
+                    System.out.println("Backwards");
+                    model.setPadValue(model.padValueDummy);
+                    break;
+                case "Alternating":
+                    model.setPadValue(2);
+                    System.out.println("Alternating");
+                    model.setPadValue(model.padValueDummy);
+                    break;
+                case "Reset":
+                    model.setPadValue(3);
+                    System.out.println("Reset");
+                    model.setPadValue(model.padValueDummy);
+                    break;
+            }
+                });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-        // Sample
+        // Select sample
         view.sampleLoadbtn.setOnAction( e ->{
             Window primaryStage = null;
             File selectedFile = model.loadSample().showOpenDialog(primaryStage);
