@@ -27,36 +27,37 @@ public class View {
     // Exit
     Button exitBtn = new Button("Exit");
     // Pitch
-    Label pitchName= new Label("Pitch");
-    Label pitchValue = new Label("0");
+    Label pitchNameLbl = new Label("Pitch");
+    Label pitchValueLbl = new Label("0");
     Button pitchBtn = new Button("Set Pitch");
     Spinner<Integer> pitchInput = new Spinner(0, 127, 0);
     // GrainSize
-    Label grainSizeName= new Label("GrainSize");
-    Label grainSizeValue = new Label("0");
+    Label grainSizeNameLbl = new Label("GrainSize");
+    Label grainSizeValueLbl = new Label("0");
     Button grainSizeBtn = new Button("Set Grain");
-    TextArea grainSizeInput = new TextArea();
+    Spinner<Integer> grainSizeInput = new Spinner(0, 127, 0);
     // GrainInterval
-    Label grainIntervalName= new Label("GrainInterval");
-    Label grainIntervalValue = new Label("0");
-    Button grainIntervalBtn = new Button("Set Grain");
-    TextArea grainIntervalInput = new TextArea();
+    Label grainIntervalNameLbl = new Label("GrainInterval");
+    Label grainIntervalValueLbl = new Label("0");
+    Button grainIntervalBtn = new Button("Set Grain Interval");
+    Spinner<Integer> grainIntervalInput = new Spinner(0, 127, 0);
     // GrainInterval
-    Label randomnessName= new Label("Randomness");
-    Label randomnessValue = new Label("0");
+    Label randomnessNameLbl = new Label("Randomness");
+    Label randomnessValueLbl = new Label("0");
     Button randomnessBtn = new Button("Set randomness");
-    TextArea randomnessInput = new TextArea();
+    Spinner<Integer> randomnessInput = new Spinner(0, 127, 0);
     // StartLoop
-    Label startName= new Label("Start");
-    Label startValue = new Label("0");
+    Label startNameLbl = new Label("Start");
+    Label startValueLbl = new Label("0");
     Button startBtn = new Button("Set Start");
-    TextArea startInput = new TextArea();
+    Spinner<Integer> startInput = new Spinner(0, 127, 0);
     // EndLoop
-    Label endName= new Label("End");
-    Label endValue = new Label("0");
+    Label endNameLbl = new Label("End");
+    Label endValueLbl = new Label("0");
     Button endBtn = new Button("Set End");
-    TextArea endInput = new TextArea();
+    Spinner<Integer>  endInput = new Spinner(0, 127, 0);
 
+    // L0rt
     Button updatePlease = new Button("UPDATE PLEASE");
     Button printPitch = new Button("Print Pitch");
     String loopTypes [] = {"Forwards", "Backwards"};
@@ -85,43 +86,47 @@ public class View {
         Grid.add(selectLoopComb, 0, 3);
         selectLoopComb.getSelectionModel().selectFirst();
         // Pitch
-        Grid.add(pitchName, 2, 5);
+        Grid.add(pitchNameLbl, 2, 5);
         pitchInput.setMaxSize(60, 20);
         pitchInput.setEditable(true);
-        pitchInput.getStyleClass().clear();
         Grid.add(pitchInput, 2, 6);
         Grid.add(pitchBtn, 2, 7);
-        Grid.add(pitchValue, 3, 6);
+        Grid.add(pitchValueLbl, 3, 6);
         // GrainSize
-        Grid.add(grainSizeName, 2, 8);
-        grainSizeInput.setMaxSize(30, 20);
+        Grid.add(grainSizeNameLbl, 2, 8);
+        grainSizeInput.setMaxSize(60, 20);
+        grainSizeInput.setEditable(true);
         Grid.add(grainSizeInput, 2, 9);
         Grid.add(grainSizeBtn, 2, 10);
-        Grid.add(grainSizeValue, 3, 9);
+        Grid.add(grainSizeValueLbl, 3, 9);
         // GrainSize
-        Grid.add(grainIntervalName, 2, 11);
-        grainIntervalInput.setMaxSize(30, 20);
+        Grid.add(grainIntervalNameLbl, 2, 11);
+        grainIntervalInput.setMaxSize(60, 20);
+        grainIntervalInput.setEditable(true);
         Grid.add(grainIntervalInput, 2, 12);
         Grid.add(grainIntervalBtn, 2, 13);
-        Grid.add(grainIntervalValue, 3, 12);
+        Grid.add(grainIntervalValueLbl, 3, 12);
         // Randomness
-        Grid.add(randomnessName, 2, 14);
-        randomnessInput.setMaxSize(30, 20);
+        Grid.add(randomnessNameLbl, 2, 14);
+        randomnessInput.setMaxSize(60, 20);
+        randomnessInput.setEditable(true);
         Grid.add(randomnessInput, 2, 15);
         Grid.add(randomnessBtn, 2, 16);
-        Grid.add(randomnessValue, 3, 15);
+        Grid.add(randomnessValueLbl, 3, 15);
         // Start
-        Grid.add(startName, 5, 5);
-        startInput.setMaxSize(30, 20);
+        Grid.add(startNameLbl, 5, 5);
+        startInput.setMaxSize(60, 20);
+        startInput.setEditable(true);
         Grid.add(startInput, 5, 6);
         Grid.add(startBtn, 5, 7);
-        Grid.add(startValue, 6, 6);
+        Grid.add(startValueLbl, 6, 6);
         // End
-        Grid.add(endName, 5, 8);
-        endInput.setMaxSize(30, 20);
+        Grid.add(endNameLbl, 5, 8);
+        endInput.setMaxSize(60, 20);
+        endInput.setEditable(true);
         Grid.add(endInput, 5, 9);
         Grid.add(endBtn, 5, 10);
-        Grid.add(endValue, 6, 9);
+        Grid.add(endValueLbl, 6, 9);
         // Weird stuff
         Grid.add(updatePlease, 20, 20);
         Grid.add(printPitch, 19,20);

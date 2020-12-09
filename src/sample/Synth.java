@@ -162,7 +162,7 @@ public class Synth implements Runnable{
             }
 
             // Random (Knob 4)
-            if (getKnobValue(4) == 0) {
+            if (getKnobValue(4) > 0) {
                 gsp.setRandomness(new Static(getKnobValue(4)));
             } else {
                 setKnobValue(4, 0);
