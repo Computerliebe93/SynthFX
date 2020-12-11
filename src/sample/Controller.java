@@ -15,8 +15,8 @@ public class Controller {
     public  void setView(View view) {
         view.exitBtn.setOnAction(e -> Platform.exit());
         view.exitBtn.setOnAction(e -> System.exit(0));
-        // Pitch
-        view.pitchOnBtn.setOnAction(e ->{
+        // Pitch toggle
+            view.pitchOnBtn.setOnAction(e -> {
             if(view.pitchOnBtn.isSelected()){
                 model.pitchToggle = true;
             }
@@ -35,13 +35,33 @@ public class Controller {
         view.pitchBtn.setOnAction(e -> {
             view.pitchValueLbl.setText(view.pitchInput.getValue().toString());
             model.setKnobValue(1, view.pitchInput.getValue());
-
         });
+
+        // Grain size toggle
+         view.grainSizeOnBtn.setOnAction(e -> {
+            if (view.grainSizeOnBtn.isSelected()){
+                model.grainSizeToggle = true;
+            } else if (!view.grainSizeOnBtn.isSelected()){
+                model.grainSizeToggle = false;
+            }
+        });
+
         // Grain size button
         view.grainSizeBtn.setOnAction(e -> {
             view.grainSizeValueLbl.setText(view.grainSizeInput.getValue().toString());
             model.setKnobValue(2, view.grainSizeInput.getValue());
         });
+
+
+        // Grain interval toggle
+        view.grainIntOnBtn.setOnAction(e -> {
+            if (view.grainIntOnBtn.isSelected()) {
+                model.grainIntervalToggle = true;
+            } else if (!view.grainIntOnBtn.isSelected()) {
+                model.grainSizeToggle = false;
+            }
+        });
+
         // Grain interval
         view.grainIntervalBtn.setOnAction(e -> {
             view.grainIntervalValueLbl.setText(view.grainIntervalInput.getValue().toString());
@@ -52,11 +72,29 @@ public class Controller {
             view.randomnessValueLbl.setText(view.randomnessInput.getValue().toString());
            model.setKnobValue(4, view.randomnessInput.getValue());
         });
+        // Start point toggle
+          view.startPointOnBtn.setOnAction(e -> {
+            if (view.startPointOnBtn.isSelected()) {
+                model.startPointToggle = true;
+            } else if (!view.startPointOnBtn.isSelected()) {
+                model.startPointToggle = false;
+            }
+        });
         // Start point
         view.startBtn.setOnAction(e -> {
             view.startValueLbl.setText(view.startInput.getValue().toString());
             model.setKnobValue(5, view.startInput.getValue());
         });
+        
+        // End point toggle
+        view.endPointOnBtn.setOnAction(e -> {
+            if (view.endPointOnBtn.isSelected()) {
+                model.endPointToggle = true;
+            } else if (!view.endPointOnBtn.isSelected()) {
+                model.endPointToggle = false;
+            }
+        });
+
         // End point
         view.endBtn.setOnAction(e -> {
             view.endValueLbl.setText(view.endInput.getValue().toString());
