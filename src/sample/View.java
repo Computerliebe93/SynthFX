@@ -75,6 +75,7 @@ public class View {
     Button printPitch = new Button("Print Pitch");
     String loopTypes [] = {"Forwards", "Backwards", "Alternating", "Reset"};
     ComboBox<String> selectLoopComb = new ComboBox(FXCollections.observableArrayList(loopTypes));
+    ToggleButton toggleButton = new ToggleButton("Hej");
 
     private void createAndConfigure(){
         Header = new HBox();
@@ -82,6 +83,7 @@ public class View {
         StartView = new BorderPane();
         StartView.setTop(Header);
         StartView.setCenter(Grid);
+
 
        /* StartView.setMinSize(00, 200);
         StartView.setPadding(new Insets(10, 10, 10, 10));
@@ -153,6 +155,7 @@ public class View {
         Grid.add(updatePlease, 20, 20);
         Grid.add(printPitch, 19,20);
         Grid.add(exitBtn, 21, 20);
+        Grid.add(toggleButton, 15, 15);
 
     }
     public Parent asParent() {

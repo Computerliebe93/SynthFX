@@ -90,8 +90,7 @@ public class Controller {
                     System.out.println("Reset");
                     model.setPadValue(model.padValueDummy);
                     break;
-            }
-                });
+            }});
 
         // Select sample
         view.sampleLoadbtn.setOnAction( e ->{
