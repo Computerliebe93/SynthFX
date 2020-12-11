@@ -1,9 +1,7 @@
 package sample;
 import javafx.stage.FileChooser;
 import net.beadsproject.beads.core.AudioContext;
-import net.beadsproject.beads.core.Bead;
 import net.beadsproject.beads.core.UGen;
-import net.beadsproject.beads.data.Pitch;
 import net.beadsproject.beads.data.Sample;
 import net.beadsproject.beads.ugens.GranularSamplePlayer;
 import net.beadsproject.beads.ugens.SamplePlayer;
@@ -51,6 +49,7 @@ public class Synth{
         if (a[1] > 0 && a[1] <= knobValues.length) {
             knobValues[a[1]] = a[2];
             System.out.println("Knob " + a[1] + " value is set to " + knobValues[a[1]]);
+            view.pitchValueLbl.setText("asd");
         } else {
             System.out.println("Something went wrong");
         }
@@ -64,11 +63,6 @@ public class Synth{
     }
     public void setKnobValue(int knobTransmitter, int value){
         knobValues[knobTransmitter] = value;
-    }
-
-    // Button set value
-    public void setKnob(){
-
     }
     // PAD
     public void receivePadMidi(byte[] a) {
@@ -97,8 +91,6 @@ public class Synth{
     public void setKeysValue( int value){
         keyValues[0] = value;
     }
-
-    // FileChooser
     public FileChooser loadSample(){
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
@@ -120,6 +112,4 @@ public class Synth{
     public String getSample(){
         return samplePath;
     }
-
-
 }

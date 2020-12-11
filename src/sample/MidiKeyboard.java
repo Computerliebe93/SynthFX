@@ -46,11 +46,13 @@ public class MidiKeyboard {
                 if (aMsg[0] == -64) {
                     synth.receivePadMidi(aMsg);
                 }
-                if (aMsg[0] == -112)
+                if (aMsg[0] == -112) {
                     synth.receiveKeysMidi(aMsg);
+                }
+                System.out.println(aMsg[i]);
+
             }
         }
-        //System.out.println(aMsg[i]);
 
         public void close() {
         }

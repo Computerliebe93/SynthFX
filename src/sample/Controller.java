@@ -12,7 +12,7 @@ public class Controller {
         this.model = model;
     }
 
-    public  void setView(View view) {
+    public void setView(View view) {
         view.exitBtn.setOnAction(e -> Platform.exit());
         view.exitBtn.setOnAction(e -> System.exit(0));
         // Pitch
@@ -50,7 +50,7 @@ public class Controller {
         // Randomness
         view.randomnessBtn.setOnAction(e -> {
             view.randomnessValueLbl.setText(view.randomnessInput.getValue().toString());
-           model.setKnobValue(4, view.randomnessInput.getValue());
+            model.setKnobValue(4, view.randomnessInput.getValue());
         });
         // Start point
         view.startBtn.setOnAction(e -> {
@@ -90,7 +90,8 @@ public class Controller {
                     System.out.println("Reset");
                     model.setPadValue(model.padValueDummy);
                     break;
-            }});
+            }
+        });
 
         // Select sample
         view.sampleLoadbtn.setOnAction( e ->{
