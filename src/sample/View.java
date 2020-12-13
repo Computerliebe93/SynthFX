@@ -9,7 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import net.beadsproject.beads.ugens.GranularSamplePlayer;
 
-public class View<slider> {
+public class View {
     Synth model;
     Controller control;
     public View(Synth model, Controller control){
