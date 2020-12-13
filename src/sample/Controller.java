@@ -99,6 +99,7 @@ public class Controller {
             File selectedFile = model.chooseSampleFile().showOpenDialog(primaryStage);
             if(selectedFile != null){
                 model.setSample(selectedFile.getPath());
+                model.updateAudioContext();
             }
         });
     }

@@ -34,6 +34,8 @@ public class Synth implements Runnable{
     final double sprayOffset = 10000;
     final double loopOffset = 100;
     final int padValueDummy = 10;
+    private final AudioContext ac = new AudioContext();
+    private boolean newSampleSelected = false;
 
     public void setController(Controller controller){
         this.controller = controller;
@@ -115,18 +117,13 @@ public class Synth implements Runnable{
         return samplePath;
     }
 
-
-    @Override
-    public void run() {
-        System.out.println("OVERRIDE HAPPENED");
-        AudioContext ac = new AudioContext();
-        // load the source sample from a file
+    private GranularSamplePlayer playSample(){
         Sample sourceSample = null;
         boolean sampleReady = false;
         // instantiate synth and midikeyboard
 
         try {
-            sourceSample = new Sample("C:\\Users\\baker\\Music\\hey\\7127493_So_Beat_Original_Mix.aiff");
+            sourceSample = new Sample(this.getSample());
             sampleReady = true;
         } catch (Exception e) {
             System.out.println(e.getMessage());
@@ -139,9 +136,29 @@ public class Synth implements Runnable{
         // connect gsp to ac
         ac.out.addInput(gsp);
         ac.start();
+        return gsp;
+    }
+
+    public void updateAudioContext() {
+        newSampleSelected = true;
+    }
+
+    @Override
+    public void run() {
+        System.out.println("OVERRIDE HAPPENED");
+
+        // load the source sample from a file
+        this.setSample("C:\\Users\\kaese47\\OneDrive\\Dokumenter\\SourceTree\\SynthFX\\Ring02.wav");
+        GranularSamplePlayer gsp = this.playSample();
 
         // while-loop to configure modifiers live
-        while (sampleReady){
+        while (gsp != null){
+            if (newSampleSelected)
+            {
+                //if a new sample is selected, load it and clear the flag
+                gsp = this.playSample();
+                newSampleSelected = false;
+            }
             // KNOBS //
             // Pitch (Knob 1)
             if(!pitchToggle){
