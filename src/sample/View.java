@@ -71,8 +71,8 @@ public class View<slider> {
     Spinner<Integer> sprayInput = new Spinner(0, 127, 0);
 
     //Visualizer
-    //Slider slider = new Slider(0, 1, 0.5);
-
+    Slider slider = new Slider(0, 100, 50);
+    Label sliderNameLbl = new Label("Progress bar");
 
 
     // L0rt
@@ -154,12 +154,14 @@ public class View<slider> {
         Grid.add(sprayBtn,5,13);
         Grid.add(sprayValueLbl, 6,12);
 
-        //Visualizer
-        /*Grid.add(slider, 30, 35);
-        slider.setShowTickMarks(true);
-        slider.setShowTickLabels(true);
-        slider.setMajorTickUnit(25.0);
-        slider.setBlockIncrement(1.0);*/
+
+        // Visualizer
+        Grid.add(slider, 21, 11);
+        Grid.add(sliderNameLbl,21, 10);
+        //slider.setShowTickMarks(true);
+        //slider.setShowTickLabels(true);
+        //slider.setMajorTickUnit(25.0);
+        //slider.setBlockIncrement(1.0);
 
         // Weird stuff
         Grid.add(updatePlease, 20, 20);
