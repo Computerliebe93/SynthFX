@@ -1,4 +1,6 @@
 package sample;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.stage.FileChooser;
 import net.beadsproject.beads.core.AudioContext;
 import net.beadsproject.beads.core.UGen;
@@ -36,16 +38,46 @@ public class Synth implements Runnable{
     final int padValueDummy = 10;
     private AudioContext ac = new AudioContext();
     private boolean newSampleSelected = false;
+    private GranularSamplePlayer gsp;
 
-    public void setController(Controller controller){
+
+    //test - works
+    private final StringProperty position = new SimpleStringProperty("None");
+    public StringProperty positionProperty() {
+        return position ;
+    }
+    public final String getPosition() {
+        return positionProperty().get();
+    }
+    public final void setPosition(String position) {
+        positionProperty().set(position);
+    }
+
+    // maxvalue property
+    private final StringProperty maxValue = new SimpleStringProperty("None");
+    public StringProperty maxValueProperty() {
+        return maxValue ;
+    }
+    public final String getMaxValueProperty() {
+        return maxValueProperty().get();
+    }
+    public final void setMaxValue(String maxValue) {
+        maxValueProperty().set(maxValue);
+    }
+
+
+    public void setController(Controller controller) {
         this.controller = controller;
     }
-    public void setView(View view){
+
+    public void setView(View view) {
         this.view = view;
     }
-    public void setMidiKeyboard(MidiKeyboard midiKeyboard){
+
+    public void setMidiKeyboard(MidiKeyboard midiKeyboard) {
         this.midiKeyboard = midiKeyboard;
     }
+
     // KNOB
     public void receiveKnobMidi(byte[] a) {
         if (a[1] > 0 && a[1] <= knobValues.length) {
@@ -55,6 +87,7 @@ public class Synth implements Runnable{
             System.out.println("Something went wrong");
         }
     }
+
     public float getKnobValue(int knobTransmitter) {
         if (knobTransmitter > 0 && knobTransmitter <= knobValues.length) {
             return knobValues[knobTransmitter];
@@ -152,32 +185,32 @@ public class Synth implements Runnable{
         System.out.println("OVERRIDE HAPPENED");
 
         // load the source sample from a file
-        this.setSample("C:\\Users\\kaese47\\OneDrive\\Dokumenter\\SourceTree\\SynthFX\\Ring02.wav");
-        GranularSamplePlayer gsp = this.playSample();
+        this.setSample("C:\\Users\\kaese47\\Music\\Adriatique vs Bob Marley- Mr Creasy is shining (rain's vocal mashup edit).wav");
+        gsp = this.playSample();
+
+        //resize slider
+        this.setMaxValue(String.valueOf(ac.getTime()));
 
         // while-loop to configure modifiers live
-        while (gsp != null){
-            if (newSampleSelected)
-            {
+        while (gsp != null) {
+            if (newSampleSelected) {
                 //if a new sample is selected, load it and clear the flag
                 gsp = this.playSample();
                 newSampleSelected = false;
             }
             // KNOBS //
             // Pitch (Knob 1)
-            if(!pitchToggle){
+            if (!pitchToggle) {
 
             }
-            if(getKeysValue() > 0 && pitchToggle == true){
+            if (getKeysValue() > 0 && pitchToggle == true) {
                 setKnobValue(1, (int) getKeysValue());
                 setKeysValue(0);
             }
 
             if (getKnobValue(1) > 0 && pitchToggle == true) {
                 gsp.setPitch(new Static(ac, (float) (getKnobValue(1) * (pitchOffset))));
-            }
-
-            else if (getKnobValue(1) == 0){
+            } else if (getKnobValue(1) == 0) {
                 gsp.setPitch(new Static(1));
             }
 
@@ -207,8 +240,7 @@ public class Synth implements Runnable{
                 float max = getKnobValue(7) + 1;
                 int min = 1;
                 spray = random.nextInt((int) ((max - min) * sprayOffset));
-            }
-            else {
+            } else {
                 spray = loopOffset;
             }
             // Loop start/end
@@ -246,4 +278,13 @@ public class Synth implements Runnable{
             }
         }
     }
+
+    public void setSampleCurrentValue(double currentValue) {
+        gsp.setPosition(currentValue);
+    }
+
+    public double getSampleCurrentValue() {
+        return gsp.getPosition();
+    }
+
 }
