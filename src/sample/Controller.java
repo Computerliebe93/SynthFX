@@ -98,7 +98,7 @@ public class Controller {
             Window primaryStage = null;
             File selectedFile = model.chooseSampleFile().showOpenDialog(primaryStage);
             if(selectedFile != null){
-                model.setSample(selectedFile);
+                model.setSample(selectedFile.getPath());
             }
         });
     }

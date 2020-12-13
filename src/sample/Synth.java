@@ -98,16 +98,18 @@ public class Synth implements Runnable{
         );
         return fileChooser;
     }
-    public String setSample(File file){
+
+    public void setSample(String filePath) {
         String path = null;
         try {
-            path = file.getCanonicalPath();
-            samplePath = path;
+            //check if such a file exists
+            File selectedFile = new File(filePath);
+            path = selectedFile.getCanonicalPath();
+            samplePath = filePath;
         } catch (IOException e) {
             e.printStackTrace();
         }
         System.out.println(path);
-        return path;
     }
     public String getSample(){
         return samplePath;
