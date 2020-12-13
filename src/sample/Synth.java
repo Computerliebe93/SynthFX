@@ -53,7 +53,6 @@ public class Synth implements Runnable{
 
     public Synth() {
 
-
         // load the source sample from a file
         Sample sourceSample = null;
         try
@@ -75,28 +74,20 @@ public class Synth implements Runnable{
             e.printStackTrace();
             System.exit(1);
         }
-
         // instantiate a GranularSamplePlayer
         gsp = new GranularSamplePlayer(ac, sourceSample);
-
         // tell gsp to loop the file
         gsp.setLoopType(SamplePlayer.LoopType.LOOP_FORWARDS);
 
-
         // connect gsp to ac
         ac.out.addInput(gsp);
-
         // begin audio processing
         ac.start();
         System.out.println("Does it reach here*");
-
-
     }
-
 
     public void setController(Controller controller){
         this.controller = controller;
-
     }
     public void setView(View view){
         this.view = view;
@@ -112,7 +103,6 @@ public class Synth implements Runnable{
         } else {
             System.out.println("Something went wrong");
         }
-
         if (a[1] == 1){
             setPitch(a[2]);
         }
@@ -152,7 +142,7 @@ public class Synth implements Runnable{
         }
     }
     public void setKnobValue(int knobTransmitter, int value){
-                knobValues[knobTransmitter] = value;
+        knobValues[knobTransmitter] = value;
     }
     // PAD
     public void receivePadMidi(byte[] a) {
@@ -162,7 +152,6 @@ public class Synth implements Runnable{
             System.out.println("Active pad is " + padValues[0]);
         }
     }
-
     public int getPadValue() {
         return padValues[0];
     }
@@ -173,69 +162,67 @@ public class Synth implements Runnable{
     public void receiveKeysMidi(byte[] a) {
         keyValues[0] = a[1];
         System.out.println("Key value is set to " + a[1]);
+        setPitch(a[1]);
     }
-
     public float getKeysValue() {
         return keyValues[0];
     }
     public void setKeysValue( int value){
         keyValues[0] = value;
     }
-
     // Pitch
-    public void setPitch(float f){
-        gsp.setPitch( new Static((float)((f) * (pitchOffset))));
-        if(f == 60){
-
-        }
-        else{
-            gsp.getPitchUGen().start();
-        }
+    public void setPitch(float f) {
+        gsp.setPitch(new Static((float) ((f) * (pitchOffset))));
     }
-
     // Grain Size
     public void setGrainSize(float f){
-        gsp.setGrainSize( new Static(f));
-
+        gsp.setGrainSize(new Static((float)((f) * (sizeOffset))));
     }
-
     // Grain Interval
     public void setGrainInterval(float f){
-        gsp.setGrainInterval( new Static(f));
+        gsp.setGrainInterval(new Static((float)((f) * intervalOffset)));
     }
-
     // Randomness
     public void setRandomness(float f){
         gsp.setRandomness( new Static(f));
     }
-
     // Start
-    public void setStart(float f){
-        gsp.setLoopStart( new Static(f*10));
+    public void setStart(float f) {
+        if (getKnobValue(5) > getKnobValue(6)) {
+            setKnobValue(5, (int) getKnobValue(6) - 1);
+            gsp.setLoopStart(new Static((float) ((f) * (spray))));
+        }
     }
-
     // End
     public void setEnd(float f){
-        gsp.setLoopEnd( new Static(f*10));
+        gsp.setLoopEnd( new Static((float)((f) * (spray))));
     }
-
     // Spray
     public void setSpray(float f){
-        //gsp.setSpray( new Static(f));
+        if (getKnobValue(7) > 0) {
+            Random random = new Random();
+            float max = getKnobValue(7) + 1;
+            int min = 1;
+            spray = random.nextInt((int) ((max - min) * sprayOffset));
+        } else {
+            spray = loopOffset;
+        }
     }
-
     // UPDATE View
     public void GUIUpdate(Label label, Spinner text, int knob){
+        if(text != null) {
+            if ((Float.valueOf(text.getValue().toString())) >= 0) {
+                try {
 
-        if(text != null){
-            try{
-                if(((Integer)text.getValue()) >= 0){
                     label.setText(String.valueOf(text.getValue()));
                     setKnobValue(knob, ((Integer) text.getValue()));
                 }
-            }
-            catch (NumberFormatException e){
-                System.out.println("Please enter a number");
+                catch(NumberFormatException e){
+                    System.out.println("Please enter a number");
+                }
+                catch(NullPointerException n){
+                    System.out.println("Please enter an integer number");
+                }
             }
         }
         else{
@@ -265,11 +252,8 @@ public class Synth implements Runnable{
     public String getSample(){
         return samplePath;
     }
-
     private GranularSamplePlayer mountGsp(){
-
         Sample sourceSample = null;
-
         try {
             sourceSample = new Sample(getSample());
             System.out.println("Sample was set to: " + getSample());
@@ -279,19 +263,15 @@ public class Synth implements Runnable{
             e.printStackTrace();
             sampleReady = false;
         }
-
         GranularSamplePlayer gsp = new GranularSamplePlayer(ac, sourceSample);
         return gsp;
-
     }
-
     public void threadStart(){
-
     }
 
     @Override
     public void run(){
-
+/*
         System.out.println("RUNNING RUN");
 
         GranularSamplePlayer gsp  = mountGsp();
@@ -380,6 +360,6 @@ public class Synth implements Runnable{
                     setPadValue(padValueDummy);
                     break;
             }
-        }
+        }*/
     }
 }
