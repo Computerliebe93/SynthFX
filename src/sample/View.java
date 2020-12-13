@@ -157,14 +157,6 @@ public class View {
         Grid.add(slider, 21, 11);
         Grid.add(sliderNameLbl,21, 10);
 
-
-
-
-        //test
-        Label testStringProperty  = new Label();
-        testStringProperty.textProperty().bind(model.positionProperty());
-        Grid.add(testStringProperty, 21,15);
-
         //maxValue
         Label sliderMaxValueLbl  = new Label();
         sliderMaxValueLbl.textProperty().bind(
