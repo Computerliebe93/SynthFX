@@ -34,7 +34,7 @@ public class Synth implements Runnable{
     final double sprayOffset = 10000;
     final double loopOffset = 100;
     final int padValueDummy = 10;
-    private final AudioContext ac = new AudioContext();
+    private AudioContext ac = new AudioContext();
     private boolean newSampleSelected = false;
 
     public void setController(Controller controller){
@@ -118,6 +118,10 @@ public class Synth implements Runnable{
     }
 
     private GranularSamplePlayer playSample(){
+        ac.stop();
+        ac.out.kill();
+        ac = new AudioContext();
+
         Sample sourceSample = null;
         boolean sampleReady = false;
         // instantiate synth and midikeyboard
