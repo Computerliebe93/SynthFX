@@ -1,4 +1,5 @@
 package sample;
+import javafx.application.Platform;
 import javafx.stage.FileChooser;
 import net.beadsproject.beads.core.AudioContext;
 import net.beadsproject.beads.core.UGen;
@@ -49,10 +50,18 @@ public class Synth{
         if (a[1] > 0 && a[1] <= knobValues.length) {
             knobValues[a[1]] = a[2];
             System.out.println("Knob " + a[1] + " value is set to " + knobValues[a[1]]);
-            view.pitchValueLbl.setText("asd");
         } else {
             System.out.println("Something went wrong");
         }
+        Platform.runLater(()-> {
+            view.pitchValueLbl.setText(String.valueOf(getKnobValue(1)));
+            view.grainSizeValueLbl.setText(String.valueOf(getKnobValue(2)));
+            view.grainIntervalValueLbl.setText(String.valueOf(getKnobValue(3)));
+            view.randomnessValueLbl.setText(String.valueOf(getKnobValue(4)));
+            view.startValueLbl.setText(String.valueOf(getKnobValue(5)));
+            view.endValueLbl.setText(String.valueOf(getKnobValue(6)));
+            view.sprayValueLbl.setText(String.valueOf(getKnobValue(7)));
+        });
     }
     public float getKnobValue(int knobTransmitter) {
         if (knobTransmitter > 0 && knobTransmitter <= knobValues.length) {
