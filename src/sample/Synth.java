@@ -90,7 +90,8 @@ public class Synth implements Runnable{
     public void setKeysValue( int value){
         keyValues[0] = value;
     }
-    public FileChooser loadSample(){
+
+    public FileChooser chooseSampleFile() {
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
                 new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.acac")

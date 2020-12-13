@@ -96,7 +96,7 @@ public class Controller {
         // Select sample
         view.sampleLoadbtn.setOnAction( e ->{
             Window primaryStage = null;
-            File selectedFile = model.loadSample().showOpenDialog(primaryStage);
+            File selectedFile = model.chooseSampleFile().showOpenDialog(primaryStage);
             if(selectedFile != null){
                 model.setSample(selectedFile);
             }
