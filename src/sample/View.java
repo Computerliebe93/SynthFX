@@ -9,7 +9,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import net.beadsproject.beads.ugens.GranularSamplePlayer;
 
-public class View {
+public class View<slider> {
     Synth model;
     Controller control;
     public View(Synth model, Controller control){
@@ -69,6 +69,11 @@ public class View {
     Button sprayOnBtn = new Button("Spray On");
     Button sprayBtn = new Button("Set Spray");
     Spinner<Integer> sprayInput = new Spinner(0, 127, 0);
+
+    //Visualizer
+    //Slider slider = new Slider(0, 1, 0.5);
+
+
 
     // L0rt
     Button updatePlease = new Button("UPDATE PLEASE");
@@ -148,6 +153,13 @@ public class View {
         Grid.add(sprayInput,5,12);
         Grid.add(sprayBtn,5,13);
         Grid.add(sprayValueLbl, 6,12);
+
+        //Visualizer
+        /*Grid.add(slider, 30, 35);
+        slider.setShowTickMarks(true);
+        slider.setShowTickLabels(true);
+        slider.setMajorTickUnit(25.0);
+        slider.setBlockIncrement(1.0);*/
 
         // Weird stuff
         Grid.add(updatePlease, 20, 20);

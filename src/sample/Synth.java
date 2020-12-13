@@ -123,7 +123,7 @@ public class Synth implements Runnable{
         // instantiate synth and midikeyboard
 
         try {
-            sourceSample = new Sample("Alarm05.wav");
+            sourceSample = new Sample("C:\\Users\\baker\\Music\\hey\\7127493_So_Beat_Original_Mix.aiff");
             sampleReady = true;
         } catch (Exception e) {
             System.out.println(e.getMessage());
