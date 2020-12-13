@@ -94,10 +94,12 @@ public class Controller {
                 });
 
         // Select sample
-        view.sampleLoadbtn.setOnAction( e ->{
+        view.sampleLoadbtn.setOnsetSampleAction( e ->{
             Window primaryStage = null;
             File selectedFile = model.loadSample().showOpenDialog(primaryStage);
-            model.setSample(selectedFile);
+            if(selectedFile != null){
+                model.setSample(selectedFile);
+            }
         });
     }
 }
