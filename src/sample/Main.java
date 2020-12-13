@@ -17,6 +17,8 @@ public class Main extends Application  {
         primaryStage.setScene(new Scene(view.asParent(), 800, 600));
         controller.setView(view);
         primaryStage.show();
+
+        //new  thread for model
         Thread thread = new Thread(synth);
         thread.start();
     }
