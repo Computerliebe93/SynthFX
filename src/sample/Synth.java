@@ -1,4 +1,7 @@
 package sample;
+import javafx.application.Platform;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.stage.FileChooser;
@@ -40,29 +43,25 @@ public class Synth implements Runnable{
     private boolean newSampleSelected = false;
     private GranularSamplePlayer gsp;
 
-
-    //test - works
-    private final StringProperty position = new SimpleStringProperty("None");
-    public StringProperty positionProperty() {
-        return position ;
-    }
-    public final String getPosition() {
-        return positionProperty().get();
-    }
-    public final void setPosition(String position) {
-        positionProperty().set(position);
-    }
-
     // maxvalue property
-    private final StringProperty maxValue = new SimpleStringProperty("None");
-    public StringProperty maxValueProperty() {
+    private final DoubleProperty maxValue = new SimpleDoubleProperty(0.0);
+    public DoubleProperty maxValueProperty() {
         return maxValue ;
     }
-    public final String getMaxValueProperty() {
+    public final Double getMaxValueProperty() {
         return maxValueProperty().get();
     }
-    public final void setMaxValue(String maxValue) {
+    public final void setMaxValue(Double maxValue) {
         maxValueProperty().set(maxValue);
+    }
+    
+    //currentValue property
+    private final DoubleProperty currentValue = new SimpleDoubleProperty(0.0);
+    public DoubleProperty currentValueProperty() {return currentValue;}
+    public final Double getCurrentValueProperty() {return currentValueProperty().get();}
+    public final void setCurrentValue(Double currentValue) {
+        currentValueProperty().set(currentValue);
+        //TODO: change the value to reflect the slide -> which value should be changed?
     }
 
 
@@ -168,6 +167,15 @@ public class Synth implements Runnable{
             //System.exit(1);
             sampleReady = false;
         }
+
+        //resize slider - value is in seconds;do it in new thread bc
+        // https://www.reddit.com/r/javahelp/comments/7qvqau/problem_with_updating_gui_javafx/
+        Sample finalSourceSample = sourceSample;
+        Platform.runLater(()->{
+            this.setMaxValue(finalSourceSample.getLength()/1000);
+        });
+
+
         // instantiate a GranularSamplePlayer
         GranularSamplePlayer gsp = new GranularSamplePlayer(ac, sourceSample);
         // connect gsp to ac
@@ -185,11 +193,8 @@ public class Synth implements Runnable{
         System.out.println("OVERRIDE HAPPENED");
 
         // load the source sample from a file
-        this.setSample("C:\\Users\\kaese47\\Music\\Adriatique vs Bob Marley- Mr Creasy is shining (rain's vocal mashup edit).wav");
+        this.setSample("C:\\Users\\kaese47\\OneDrive\\Dokumenter\\SourceTree\\SynthFX\\Ring02.wav");
         gsp = this.playSample();
-
-        //resize slider
-        this.setMaxValue(String.valueOf(ac.getTime()));
 
         // while-loop to configure modifiers live
         while (gsp != null) {
@@ -198,6 +203,7 @@ public class Synth implements Runnable{
                 gsp = this.playSample();
                 newSampleSelected = false;
             }
+
             // KNOBS //
             // Pitch (Knob 1)
             if (!pitchToggle) {
@@ -278,13 +284,4 @@ public class Synth implements Runnable{
             }
         }
     }
-
-    public void setSampleCurrentValue(double currentValue) {
-        gsp.setPosition(currentValue);
-    }
-
-    public double getSampleCurrentValue() {
-        return gsp.getPosition();
-    }
-
 }

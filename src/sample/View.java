@@ -155,25 +155,10 @@ public class View {
 
         // Visualizer
         Grid.add(slider, 21, 11);
-        Label sliderValueLbl  = new Label();
-        sliderValueLbl.textProperty().bind(
-            Bindings.format(
-                    "Current value: %.2f",
-                    slider.valueProperty()
-            )
-        );
         Grid.add(sliderNameLbl,21, 10);
-        Grid.add(sliderValueLbl, 21,12);
 
 
-        Label sliderCurrentTime  = new Label();
-        sliderCurrentTime.textProperty().bind(
-                Bindings.format(
-                        "Current value: %.2f",
-                        model.getAcCurrentValue()
-                )
-        );
-        Grid.add(sliderCurrentTime, 21,14);
+
 
         //test
         Label testStringProperty  = new Label();
@@ -185,10 +170,24 @@ public class View {
         sliderMaxValueLbl.textProperty().bind(
                 Bindings.format(
                         "Max value: %.2f",
-                        slider.maxProperty()
+                        model.maxValueProperty()
                 )
         );
+        slider.maxProperty().bind(model.maxValueProperty());
         Grid.add(sliderMaxValueLbl, 21,13);
+
+
+        //Current value label
+        Label sliderValueLbl  = new Label();
+        sliderValueLbl.textProperty().bind(
+                Bindings.format(
+                        "Current value: %.2f",
+                        model.currentValueProperty()
+                )
+        );
+        slider.valueProperty().bindBidirectional(model.currentValueProperty());
+        Grid.add(sliderValueLbl, 21,12);
+
 
         //slider.setShowTickMarks(true);
         //slider.setShowTickLabels(true);

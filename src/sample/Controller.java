@@ -70,7 +70,7 @@ public class Controller {
 
         //Visualizer
         view.slider.setOnMouseReleased(
-                event -> model.setSampleCurrentValue(view.slider.getValue())
+            event -> model.setCurrentValue(view.slider.getValue())
         );
 
         // Loop type
@@ -108,8 +108,8 @@ public class Controller {
                 model.updateAudioContext();
             }
 
-            model.setPosition("Hello Asbjørn");
         });
+
 
 
 
