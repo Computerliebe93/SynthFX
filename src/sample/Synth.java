@@ -128,7 +128,7 @@ public class Synth implements Runnable{
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
-            System.exit(1);
+            //System.exit(1);
             sampleReady = false;
         }
         // instantiate a GranularSamplePlayer
