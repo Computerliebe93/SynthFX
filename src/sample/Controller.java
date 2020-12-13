@@ -94,7 +94,7 @@ public class Controller {
                 });
 
         // Select sample
-        view.sampleLoadbtn.setOnsetSampleAction( e ->{
+        view.sampleLoadbtn.setOnAction( e ->{
             Window primaryStage = null;
             File selectedFile = model.loadSample().showOpenDialog(primaryStage);
             if(selectedFile != null){
