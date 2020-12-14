@@ -1,13 +1,11 @@
 package sample;
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
-import javafx.geometry.Insets;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import net.beadsproject.beads.ugens.GranularSamplePlayer;
 
 public class View {
     Synth model;
@@ -69,6 +67,11 @@ public class View {
     Button sprayOnBtn = new Button("Spray On");
     Button sprayBtn = new Button("Set Spray");
     Spinner<Integer> sprayInput = new Spinner(0, 127, 0);
+
+    //Visualizer
+    Slider slider = new Slider(0, 100, 50);
+    Label sliderNameLbl = new Label("Progress bar");
+
 
     // L0rt
     Button updatePlease = new Button("UPDATE PLEASE");
@@ -150,6 +153,41 @@ public class View {
         Grid.add(sprayInput,5,12);
         Grid.add(sprayBtn,5,13);
         Grid.add(sprayValueLbl, 6,12);
+
+
+        // Visualizer
+        Grid.add(slider, 21, 11);
+        Grid.add(sliderNameLbl,21, 10);
+
+        //maxValue
+        Label sliderMaxValueLbl  = new Label();
+        sliderMaxValueLbl.textProperty().bind(
+                Bindings.format(
+                        "Max value: %.2f",
+                        model.maxValueProperty()
+                )
+        );
+        slider.maxProperty().bind(model.maxValueProperty());
+        Grid.add(sliderMaxValueLbl, 21,13);
+
+
+        //Current value label
+        Label sliderValueLbl  = new Label();
+        sliderValueLbl.textProperty().bind(
+                Bindings.format(
+                        "Current value: %.2f",
+                        model.currentValueProperty()
+                )
+        );
+        slider.valueProperty().bindBidirectional(model.currentValueProperty());
+        Grid.add(sliderValueLbl, 21,12);
+
+
+        //slider.setShowTickMarks(true);
+        //slider.setShowTickLabels(true);
+        //slider.setMajorTickUnit(25.0);
+        //slider.setBlockIncrement(1.0);
+
 
         // Weird stuff
         Grid.add(updatePlease, 20, 20);

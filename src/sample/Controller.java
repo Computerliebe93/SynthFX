@@ -67,6 +67,12 @@ public class Controller {
             view.sprayValueLbl.setText(view.sprayInput.getValue().toString());
             model.setKnobValue(7, view.sprayInput.getValue());
         });
+
+        //Visualizer
+        view.slider.setOnMouseReleased(
+            event -> model.setCurrentValue(view.slider.getValue())
+        );
+
         // Loop type
         view.selectLoopComb.setOnAction(e -> {
             switch(view.selectLoopComb.getValue()) {
@@ -96,8 +102,16 @@ public class Controller {
         // Select sample
         view.sampleLoadbtn.setOnAction( e ->{
             Window primaryStage = null;
-            File selectedFile = model.loadSample().showOpenDialog(primaryStage);
-            model.setSample(selectedFile);
+            File selectedFile = model.chooseSampleFile().showOpenDialog(primaryStage);
+            if(selectedFile != null){
+                model.setSample(selectedFile.getPath());
+                model.updateAudioContext();
+            }
+
         });
+
+
+
+
     }
 }

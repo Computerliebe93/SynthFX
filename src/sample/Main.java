@@ -6,26 +6,35 @@ public class Main extends Application  {
 
     @Override
     public void start(Stage primaryStage) {
-        Synth synth = new Synth();
-        MidiKeyboard midiKeyboard = new MidiKeyboard(synth);
-        Controller controller = new Controller(synth);
-        View view = new View(synth, controller);
-        synth.setController(controller);
-        synth.setView(view);
-        synth.setMidiKeyboard(midiKeyboard);
+        try{
+            Synth synth = new Synth();
+            MidiKeyboard midiKeyboard = new MidiKeyboard(synth);
+            Controller controller = new Controller(synth);
+            View view = new View(synth, controller);
+            synth.setController(controller);
+            synth.setView(view);
+            synth.setMidiKeyboard(midiKeyboard);
+            primaryStage.setTitle("Grandaddy");
+            primaryStage.setScene(new Scene(view.asParent(), 800, 600));
+            controller.setView(view);
+            primaryStage.show();
 
-        Gsp gsp = new Gsp();
-        gsp.setSynth(synth);
+            //new  thread for model
+            Thread thread = new Thread(synth);
+            thread.start();
 
-
-        primaryStage.setTitle("Grandaddy");
-        primaryStage.setScene(new Scene(view.asParent(), 800, 600));
-        controller.setView(view);
-        primaryStage.show();
-
-        Thread thread = new Thread(gsp);
-        thread.start();
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
     }
     public static void main (String[]args) {launch (args);}{
+    }
+
+    @Override
+    public void stop() {
+        System.exit(0);
     }
 }
