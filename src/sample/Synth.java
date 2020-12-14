@@ -2,11 +2,9 @@ package sample;
 import javafx.application.Platform;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.concurrent.Task;
 import javafx.stage.FileChooser;
 import net.beadsproject.beads.core.AudioContext;
-import net.beadsproject.beads.core.UGen;
 import net.beadsproject.beads.data.Sample;
 import net.beadsproject.beads.ugens.GranularSamplePlayer;
 import net.beadsproject.beads.ugens.SamplePlayer;
@@ -14,6 +12,7 @@ import net.beadsproject.beads.ugens.Static;
 import java.io.File;
 import java.io.IOException;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 public class Synth implements Runnable{
     boolean pitchToggle = false;
@@ -193,8 +192,22 @@ public class Synth implements Runnable{
         System.out.println("OVERRIDE HAPPENED");
 
         // load the source sample from a file
-        this.setSample("C:\\Users\\kaese47\\OneDrive\\Dokumenter\\SourceTree\\SynthFX\\Ring02.wav");
+        this.setSample("C:\\Users\\baker\\Documents\\SourceTree\\SynthFX\\Ring02.wav");
         gsp = this.playSample();
+
+        Task<Void> task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                while(true) {
+                    setCurrentValue(ac.getTime() / 1000);
+                    System.out.println("Inside task");
+                    System.out.println(ac.getTime() / 1000);
+                    TimeUnit.MILLISECONDS.sleep(100);
+                }
+            }
+        };
+        task.run();
+
 
         // while-loop to configure modifiers live
         while (gsp != null) {
@@ -203,6 +216,8 @@ public class Synth implements Runnable{
                 gsp = this.playSample();
                 newSampleSelected = false;
             }
+
+
 
             // KNOBS //
             // Pitch (Knob 1)
