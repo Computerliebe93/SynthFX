@@ -26,6 +26,7 @@ public class View {
     Label sampleLbl = new Label("Sample: ");
     Button sampleLoadbtn = new Button("Load sample");
     TextArea samplePath = new TextArea();
+    Button playBtn = new Button("Play");
     // Exit
     Button exitBtn = new Button("Exit");
     // Pitch
@@ -33,13 +34,13 @@ public class View {
     Label pitchValueLbl = new Label("0");
     ToggleButton pitchOnBtn = new ToggleButton("Pitch On");
     Button pitchBtn = new Button("Set Pitch");
-    Spinner<Integer> pitchInput = new Spinner(0, 127, 0);
+    TextArea pitchInput = new TextArea();
     // GrainSize
     Label grainSizeNameLbl = new Label("GrainSize");
     Label grainSizeValueLbl = new Label("0");
     Button grainSizeOnBtn = new Button("Grain Size On");
     Button grainSizeBtn = new Button("Set Grain");
-    Spinner<Integer> grainSizeInput = new Spinner(0, 127, 0);
+    TextArea grainSizeInput = new TextArea();
     // GrainInterval
     Label grainIntervalNameLbl = new Label("GrainInterval");
     Label grainIntervalValueLbl = new Label("0");
@@ -71,12 +72,10 @@ public class View {
     Button sprayBtn = new Button("Set Spray");
     Spinner<Integer> sprayInput = new Spinner(0, 127, 0);
 
-    // L0rt
-    Button updatePlease = new Button("UPDATE PLEASE");
-    Button printPitch = new Button("Print Pitch");
+    // Unedited buttons
     String loopTypes [] = {"Forwards", "Backwards", "Alternating", "Reset"};
     ComboBox<String> selectLoopComb = new ComboBox(FXCollections.observableArrayList(loopTypes));
-    ToggleButton toggleButton = new ToggleButton("Hej");
+
 
     private void createAndConfigure(){
         Header = new HBox();
@@ -91,11 +90,12 @@ public class View {
         StartView.setVgap(3);
         StartView.setHgap(10);*/
         // Sample
-        Header.getChildren().addAll(sampleLbl, sampleLoadbtn, samplePath);
+        Header.getChildren().addAll(sampleLbl, sampleLoadbtn, samplePath, playBtn);
         //StartView.add(sampleLoadbtn, 1, 1);
         //StartView.add(sampleLbl, 0, 1);
         samplePath.setMaxHeight(2);
         samplePath.setMinWidth(90);
+
         //StartView.add(samplePath,1,1, 1, 1);
         // Loop
         selectLoopComb.setMinWidth(90);
@@ -153,10 +153,7 @@ public class View {
         Grid.add(sprayValueLbl, 6,12);
 
         // Weird stuff
-        Grid.add(updatePlease, 20, 20);
-        Grid.add(printPitch, 19,20);
         Grid.add(exitBtn, 21, 20);
-        Grid.add(toggleButton, 15, 15);
 
     }
     public Parent asParent() {

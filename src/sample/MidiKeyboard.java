@@ -50,7 +50,6 @@ public class MidiKeyboard {
                     synth.receiveKeysMidi(aMsg);
                 }
                 System.out.println(aMsg[i]);
-
             }
         }
 

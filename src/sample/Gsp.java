@@ -1,4 +1,4 @@
-package sample;
+/*package sample;
 
 import javafx.application.Platform;
 import net.beadsproject.beads.core.AudioContext;
@@ -11,16 +11,14 @@ import java.util.Random;
 public class Gsp implements Runnable {
 
     Synth synth;
-    View view;
 
     public void setSynth(Synth synth){
         this.synth = synth;
     }
 
-
     @Override
     public void run() {
-        System.out.println("OVERRIDE HAPPENED");
+
         AudioContext ac = new AudioContext();
         // load the source sample from a file
         Sample sourceSample = null;
@@ -126,4 +124,4 @@ public class Gsp implements Runnable {
             }
         }
     }
-}
+}*/

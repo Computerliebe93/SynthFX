@@ -15,6 +15,8 @@ public class Controller {
     public void setView(View view) {
         view.exitBtn.setOnAction(e -> Platform.exit());
         view.exitBtn.setOnAction(e -> System.exit(0));
+
+
         // Pitch
         view.pitchOnBtn.setOnAction(e ->{
             if(view.pitchOnBtn.isSelected()){
@@ -24,28 +26,21 @@ public class Controller {
                 model.pitchToggle = false;
             }
         });
-        view.updatePlease.setOnAction(e ->{
-            view.pitchValueLbl.setText(String.valueOf(model.getKnobValue(1)));
-        });
-        view.printPitch.setOnAction(e -> {
-            System.out.println("Synth pitch is set to: " + model.getKnobValue(1));
-            System.out.println(model.getSample());
-        });
-        // Pitch button
+
+        // ACTUAL PITCH
         view.pitchBtn.setOnAction(e -> {
-            view.pitchValueLbl.setText(view.pitchInput.getValue().toString());
-            model.setKnobValue(1, view.pitchInput.getValue());
+            model.GUIUpdate(view.pitchValueLbl, view.pitchInput, 1);
+            //model.setKnobValue(1, Integer.valueOf(view.pitchInput.getText()));
 
         });
         // Grain size button
         view.grainSizeBtn.setOnAction(e -> {
-            view.grainSizeValueLbl.setText(view.grainSizeInput.getValue().toString());
-            model.setKnobValue(2, view.grainSizeInput.getValue());
+            model.GUIUpdate(view.grainSizeValueLbl, view.grainSizeInput, 2);
         });
         // Grain interval
         view.grainIntervalBtn.setOnAction(e -> {
             view.grainIntervalValueLbl.setText(view.grainIntervalInput.getValue().toString());
-            model.setKnobValue(3, view.grainSizeInput.getValue());
+            model.setKnobValue(3, view.grainIntervalInput.getValue());
         });
         // Randomness
         view.randomnessBtn.setOnAction(e -> {
@@ -54,8 +49,8 @@ public class Controller {
         });
         // Start point
         view.startBtn.setOnAction(e -> {
-            view.startValueLbl.setText(view.startInput.getValue().toString());
-            model.setKnobValue(5, view.startInput.getValue());
+                view.startValueLbl.setText(view.startInput.getValue().toString());
+                model.setKnobValue(5, view.startInput.getValue());
         });
         // End point
         view.endBtn.setOnAction(e -> {

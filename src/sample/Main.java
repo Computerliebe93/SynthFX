@@ -14,17 +14,12 @@ public class Main extends Application  {
         synth.setView(view);
         synth.setMidiKeyboard(midiKeyboard);
 
-        Gsp gsp = new Gsp();
-        gsp.setSynth(synth);
-
-
         primaryStage.setTitle("Grandaddy");
         primaryStage.setScene(new Scene(view.asParent(), 800, 600));
         controller.setView(view);
         primaryStage.show();
 
-        Thread thread = new Thread(gsp);
-        thread.start();
+        synth.threadStart();
     }
     public static void main (String[]args) {launch (args);}{
     }
