@@ -7,8 +7,14 @@ import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
+
 import javafx.scene.layout.VBox;
+import net.beadsproject.beads.data.Sample;
+import net.beadsproject.beads.data.audiofile.FileFormatException;
+import net.beadsproject.beads.data.audiofile.OperationUnsupportedException;
 import net.beadsproject.beads.ugens.GranularSamplePlayer;
+
+import java.io.IOException;
 
 public class View {
     Synth model;
@@ -34,13 +40,13 @@ public class View {
     Label pitchValueLbl = new Label("0");
     ToggleButton pitchOnBtn = new ToggleButton("Pitch On");
     Button pitchBtn = new Button("Set Pitch");
-    TextArea pitchInput = new TextArea();
+    Spinner pitchInput = new Spinner(0, 127, 0);
     // GrainSize
     Label grainSizeNameLbl = new Label("GrainSize");
     Label grainSizeValueLbl = new Label("0");
     Button grainSizeOnBtn = new Button("Grain Size On");
     Button grainSizeBtn = new Button("Set Grain");
-    TextArea grainSizeInput = new TextArea();
+    Spinner grainSizeInput = new Spinner(0, 127, 0);
     // GrainInterval
     Label grainIntervalNameLbl = new Label("GrainInterval");
     Label grainIntervalValueLbl = new Label("0");
@@ -83,6 +89,8 @@ public class View {
         StartView = new BorderPane();
         StartView.setTop(Header);
         StartView.setCenter(Grid);
+        Grid.setHgap(5);
+        Grid.setVgap(5);
 
 
        /* StartView.setMinSize(00, 200);
@@ -103,11 +111,13 @@ public class View {
         selectLoopComb.getSelectionModel().selectFirst();
         // Pitch
         Grid.add(pitchNameLbl, 2, 5);
-        pitchInput.setMaxSize(60, 20);
+        pitchInput.setMaxSize(60, 10);
         pitchInput.setEditable(true);
         Grid.add(pitchInput, 2, 6);
         Grid.add(pitchOnBtn,1, 6);
         Grid.add(pitchBtn, 2, 7);
+        pitchValueLbl.setMinWidth(40);
+        pitchValueLbl.setMaxWidth(40);
         Grid.add(pitchValueLbl, 3, 6);
         // GrainSize
         Grid.add(grainSizeNameLbl, 2, 8);
@@ -116,12 +126,16 @@ public class View {
         Grid.add(grainSizeInput, 2, 9);
         Grid.add(grainSizeBtn, 2, 10);
         Grid.add(grainSizeValueLbl, 3, 9);
+        grainSizeValueLbl.setMinWidth(40);
+        grainSizeValueLbl.setMaxWidth(40);
         // GrainSize
         Grid.add(grainIntervalNameLbl, 2, 11);
         grainIntervalInput.setMaxSize(60, 20);
         grainIntervalInput.setEditable(true);
         Grid.add(grainIntervalInput, 2, 12);
         Grid.add(grainIntervalBtn, 2, 13);
+        grainIntervalValueLbl.setMinWidth(40);
+        grainIntervalValueLbl.setMaxWidth(40);
         Grid.add(grainIntervalValueLbl, 3, 12);
         // Randomness
         Grid.add(randomnessNameLbl, 2, 14);
@@ -129,6 +143,8 @@ public class View {
         randomnessInput.setEditable(true);
         Grid.add(randomnessInput, 2, 15);
         Grid.add(randomnessBtn, 2, 16);
+        randomnessValueLbl.setMinWidth(40);
+        randomnessValueLbl.setMaxWidth(40);
         Grid.add(randomnessValueLbl, 3, 15);
         // Start
         Grid.add(startNameLbl, 5, 5);
@@ -136,6 +152,8 @@ public class View {
         startInput.setEditable(true);
         Grid.add(startInput, 5, 6);
         Grid.add(startBtn, 5, 7);
+        startValueLbl.setMinWidth(40);
+        startValueLbl.setMaxWidth(40);
         Grid.add(startValueLbl, 6, 6);
         // End
         Grid.add(endNameLbl, 5, 8);
@@ -143,6 +161,8 @@ public class View {
         endInput.setEditable(true);
         Grid.add(endInput, 5, 9);
         Grid.add(endBtn, 5, 10);
+        endValueLbl.setMinWidth(40);
+        endValueLbl.setMaxWidth(40);
         Grid.add(endValueLbl, 6, 9);
         // Spray
         Grid.add(sprayNameLbl, 5, 11);

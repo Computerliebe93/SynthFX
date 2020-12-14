@@ -1,21 +1,24 @@
 package sample;
 import javafx.application.Platform;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.control.Label;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.TextArea;
-import javafx.scene.control.ToggleButton;
 import javafx.stage.FileChooser;
 import net.beadsproject.beads.core.AudioContext;
 import net.beadsproject.beads.core.UGen;
 import net.beadsproject.beads.data.Sample;
+import net.beadsproject.beads.data.SampleManager;
+import net.beadsproject.beads.data.audiofile.FileFormatException;
+import net.beadsproject.beads.data.audiofile.OperationUnsupportedException;
 import net.beadsproject.beads.ugens.GranularSamplePlayer;
 import net.beadsproject.beads.ugens.SamplePlayer;
 import net.beadsproject.beads.ugens.Static;
-import org.w3c.dom.Text;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
+import java.util.*;
 
 public class Synth implements Runnable{
     boolean pitchToggle = false;
@@ -28,10 +31,15 @@ public class Synth implements Runnable{
     private float[] knobValues = new float[9];
     private int[] padValues = new int[] {0};
     private int[] keyValues = new int[] {0};
-    private String samplePath;
+    Thread thread = new Thread(this::run);
+    public String samplePath = null;
+    AudioContext ac = new AudioContext();
     MidiKeyboard midiKeyboard;
     Controller controller;
     View view;
+    boolean sampleReady = false;
+    GranularSamplePlayer gsp;
+
 
     // Knob offsets
     final double pitchOffset = 0.1 / 6.35;
@@ -44,6 +52,7 @@ public class Synth implements Runnable{
 
     public void setController(Controller controller){
         this.controller = controller;
+
     }
     public void setView(View view){
         this.view = view;
@@ -107,6 +116,24 @@ public class Synth implements Runnable{
         keyValues[0] = value;
     }
 
+    // UPDATE View
+    public void GUIUpdate(Label label, Spinner text, int knob){
+
+        if(text != null){
+            try{
+                if(((Integer)text.getValue()) >= 0){
+                    label.setText(String.valueOf(text.getValue()));
+                    setKnobValue(knob, ((Integer) text.getValue()));
+                }
+            }
+            catch (NumberFormatException e){
+                System.out.println("Please enter a number");
+            }
+        }
+        else{
+            System.out.println("Please enter something valid");
+        }
+    }
     // SAMPLE
     public FileChooser loadSample(){
         FileChooser fileChooser = new FileChooser();
@@ -120,6 +147,7 @@ public class Synth implements Runnable{
         try {
             path = file.getCanonicalPath();
             samplePath = path;
+            sampleReady = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -130,59 +158,47 @@ public class Synth implements Runnable{
         return samplePath;
     }
 
-    // UPDATE View
-    public void GUIUpdate(Label label, TextArea text, int knob){
+    private GranularSamplePlayer mountGsp(){
 
-        if(text != null){
-            try{
-                if(Integer.valueOf(text.getText()) >= 0){
-                    label.setText(text.getText());
-                    setKnobValue(knob, Integer.valueOf(text.getText()));
-                }
-            }
-            catch (NumberFormatException e){
-                System.out.println("Please enter a number");
-            }
-        }
-        else{
-            System.out.println("Please enter something valid");
-        }
-    }
-
-    public void threadStart(){
-
-        Thread thread = new Thread(this::run);
-        thread.start();
-
-
-    }
-    @Override
-    public void run(){
-        AudioContext ac = new AudioContext();
-        // load the source sample from a file
         Sample sourceSample = null;
-        boolean sampleReady = false;
-        // instantiate synth and midikeyboard
 
         try {
-            sourceSample = new Sample("Ring02.wav");
+            sourceSample = new Sample(this.getSample());
             sampleReady = true;
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
-            System.exit(1);
+            //System.exit(1);
             sampleReady = false;
         }
-
-        // instantiate a GranularSamplePlayer
         GranularSamplePlayer gsp = new GranularSamplePlayer(ac, sourceSample);
-        // connect gsp to ac
+
+        return gsp;
+
+    }
+
+    public void threadStart(){
+
+        if (sampleReady){
+
+            thread.start();
+        }else{
+            System.out.println("Please select a sound sample");
+        }
+    }
+
+
+    @Override
+    public void run(){
+
+        this.mountGsp();
         ac.out.addInput(gsp);
         ac.start();
 
         while (sampleReady) {
             // KNOBS //
             // Pitch (Knob 1)
+            System.out.println(gsp.getSample());
             if (!pitchToggle) {
                 gsp.getPitchUGen().pause(true);
             }
@@ -190,7 +206,7 @@ public class Synth implements Runnable{
                 setKnobValue(1, (int) getKeysValue());
                 setKeysValue(0);
             }
-
+            gsp.kill();
             if (getKnobValue(1) > 0 && pitchToggle == true) {
                 gsp.setPitch(new Static(ac, (float) (getKnobValue(1) * (pitchOffset))));
             } else if (getKnobValue(1) == 0) {

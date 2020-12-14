@@ -19,7 +19,6 @@ public class Main extends Application  {
         controller.setView(view);
         primaryStage.show();
 
-        synth.threadStart();
     }
     public static void main (String[]args) {launch (args);}{
     }

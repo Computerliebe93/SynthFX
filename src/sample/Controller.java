@@ -1,9 +1,15 @@
 package sample;
 import javafx.application.Platform;
+import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.scene.control.Label;
 import javafx.stage.Window;
+import net.beadsproject.beads.data.Sample;
+import net.beadsproject.beads.data.audiofile.FileFormatException;
+import net.beadsproject.beads.data.audiofile.OperationUnsupportedException;
+
 import java.io.File;
+import java.io.IOException;
 
 public class Controller {
     Synth model;
@@ -17,6 +23,19 @@ public class Controller {
         view.exitBtn.setOnAction(e -> System.exit(0));
 
 
+
+        //TEST
+        view.playBtn.setOnAction(e ->{
+
+            if(model.samplePath != null) {
+                model.threadStart();
+            }
+            else{
+                System.out.println("Please select a sound sample");
+            }
+        });
+
+
         // Pitch
         view.pitchOnBtn.setOnAction(e ->{
             if(view.pitchOnBtn.isSelected()){
@@ -26,6 +45,7 @@ public class Controller {
                 model.pitchToggle = false;
             }
         });
+
 
         // ACTUAL PITCH
         view.pitchBtn.setOnAction(e -> {
