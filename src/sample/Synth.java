@@ -187,33 +187,60 @@ public class Synth implements Runnable{
     public void updateAudioContext() {
         newSampleSelected = true;
     }
+    //Double currentValueCounter = 0.0;
+    //int maxTimeCounter = 1;
+
 
     @Override
     public void run() {
         System.out.println("OVERRIDE HAPPENED");
 
         // load the source sample from a file
-        this.setSample("C:\\Users\\baker\\Documents\\SourceTree\\SynthFX\\Ring02.wav");
+        this.setSample("C:\\Users\\kaese47\\OneDrive\\Dokumenter\\SourceTree\\SynthFX\\Sinus.wav");
         gsp = this.playSample();
 
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
+                //initialize a current value counter to count time up to max time
+                final double[] currentValueCounter = {0.0};
+                //initialize a max times counter which counts how many times you have went over
+                //set max times counter to 1
+                final int[] maxTimeCounter = {0};
+
+
                 while(true) {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            setCurrentValue(ac.getTime() / 1000);
-                            //double loopTimer = new double[] () {
-                             //   return loopTimer = (ac.getTime() / 1000);
-                            //}
-                            //for(double i = (ac.getTime() / 100) + view.startInput.getValue(); i < view.endInput.getValue(); i+0,1){
-                             //   if (i < view.endInput.getValue() && i > view.startInput.getValue()){
-                             //   setCurrentValue(i);
+                            //set current value counter to getTime()
+                            //check if the current value counter is >= the max time
+                            //IF YES
+                                //encreses max times counter with 1
+                                //set current value to (ac.getTime - (maxTime() * maxTimesCounter)
+                            //IF NO
+                                //???
+                            currentValueCounter[0] = (ac.getTime()/1000);
+                            System.out.println("Current counter value" + currentValueCounter[0]);
+
+                            boolean isAtEnd = currentValueCounter[0] >= (maxTimeCounter[0] * getMaxValueProperty());
+
+                            if (isAtEnd) {
+                                System.out.println("Max time counter " + maxTimeCounter[0]);
+                                maxTimeCounter[0] = maxTimeCounter[0]+1;
+                                isAtEnd = false;
+
+                            }
+                            System.out.println("Current counter value 2 " + currentValueCounter[0]);
+
+                            var newValue = currentValueCounter[0] - (getMaxValueProperty() * maxTimeCounter[0]);
+                            setCurrentValue(newValue);
+                            System.out.println("Setting current counter to" + newValue);
+
                         }
-                    });
-                    System.out.println("Inside task");
-                    System.out.println(getCurrentValueProperty());
+                        });
+                    //System.out.println("Inside task");
+                    //System.out.println();
                     TimeUnit.MILLISECONDS.sleep(100);
                 }
             }
