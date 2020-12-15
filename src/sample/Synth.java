@@ -1,35 +1,37 @@
 package sample;
 import javafx.application.Platform;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.scene.control.Label;
+import javafx.scene.control.Spinner;
+import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
 import net.beadsproject.beads.core.AudioContext;
 import net.beadsproject.beads.core.UGen;
 import net.beadsproject.beads.data.Sample;
+import net.beadsproject.beads.data.SampleManager;
+import net.beadsproject.beads.data.audiofile.FileFormatException;
+import net.beadsproject.beads.data.audiofile.OperationUnsupportedException;
 import net.beadsproject.beads.ugens.GranularSamplePlayer;
 import net.beadsproject.beads.ugens.SamplePlayer;
 import net.beadsproject.beads.ugens.Static;
+
 import java.io.File;
 import java.io.IOException;
-import java.util.Random;
+import java.util.*;
 
-public class Synth implements Runnable{
-    boolean pitchToggle = false;
-    boolean grainSizeToggle = false;
-    boolean grainIntervalToggle = false;
-    boolean randomToggle = false;
-    boolean startPointToggle = false;
-    boolean endPointToggle = false;
-    boolean sprayToggle = false;
+public class Synth {
     private float[] knobValues = new float[9];
     private int[] padValues = new int[] {0};
     private int[] keyValues = new int[] {0};
-    private String samplePath;
+    public String samplePath = null;
+    AudioContext ac = new AudioContext();
     MidiKeyboard midiKeyboard;
     Controller controller;
     View view;
+    boolean sampleReady = false;
+    GranularSamplePlayer gsp;
+
 
     // Knob offsets
     final double pitchOffset = 0.1 / 6.35;
@@ -39,31 +41,34 @@ public class Synth implements Runnable{
     final double sprayOffset = 10000;
     final double loopOffset = 100;
     final int padValueDummy = 10;
-    private AudioContext ac = new AudioContext();
-    private boolean newSampleSelected = false;
-    private GranularSamplePlayer gsp;
 
-    // maxvalue property
-    private final DoubleProperty maxValue = new SimpleDoubleProperty(0.0);
-    public DoubleProperty maxValueProperty() {
-        return maxValue ;
-    }
-    public final Double getMaxValueProperty() {
-        return maxValueProperty().get();
-    }
-    public final void setMaxValue(Double maxValue) {
-        maxValueProperty().set(maxValue);
-    }
 
-    //currentValue property
-    private final DoubleProperty currentValue = new SimpleDoubleProperty(0.0);
-    public DoubleProperty currentValueProperty() {return currentValue;}
-    public final Double getCurrentValueProperty() {return currentValueProperty().get();}
-    public final void setCurrentValue(Double currentValue) {
-        currentValueProperty().set(currentValue);
-        //TODO: change the value to reflect the slide -> which value should be changed?
-    }
+    public Synth() {
 
+        Sample sourceSample = null;
+
+        try {
+            sourceSample = new Sample("Ring02.wav");
+        }
+        catch(Exception e){
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            System.exit(1);
+        }
+        // instantiate a GranularSamplePlayer
+
+        // tell gsp to loop the file
+        gsp = new GranularSamplePlayer(ac, sourceSample);
+        gsp.setLoopType(SamplePlayer.LoopType.LOOP_FORWARDS);
+
+        // connect gsp to ac
+        ac.out.addInput(gsp);
+
+        // begin audio processing
+        //ac.start();
+        System.out.println("Does it reach here*");
+
+    }
 
     public void setController(Controller controller){
         this.controller = controller;
@@ -71,11 +76,9 @@ public class Synth implements Runnable{
     public void setView(View view){
         this.view = view;
     }
-
-    public void setMidiKeyboard(MidiKeyboard midiKeyboard) {
+    public void setMidiKeyboard(MidiKeyboard midiKeyboard){
         this.midiKeyboard = midiKeyboard;
     }
-
     // KNOB
     public void receiveKnobMidi(byte[] a) {
         if (a[1] > 0 && a[1] <= knobValues.length) {
@@ -84,8 +87,37 @@ public class Synth implements Runnable{
         } else {
             System.out.println("Something went wrong");
         }
+        if (a[1] == 1){
+            setPitch(a[2]);
+        }
+        else if (a[1] == 2){
+            setGrainSize(a[2]);
+        }
+        else if (a[1] == 3){
+            setGrainInterval(a[2]);
+        }
+        else if (a[1] == 4){
+            setRandomness(a[2]);
+        }
+        else if (a[1] == 5){
+            setStart(a[2]);
+        }
+        else if (a[1] == 6){
+            setEnd(a[2]);
+        }
+        else if (a[1] == 7){
+            setSpray(a[2]);
+        }
+        Platform.runLater(()-> {
+            view.pitchValueLbl.setText(String.valueOf(getKnobValue(1)));
+            view.grainSizeValueLbl.setText(String.valueOf(getKnobValue(2)));
+            view.grainIntervalValueLbl.setText(String.valueOf(getKnobValue(3)));
+            view.randomnessValueLbl.setText(String.valueOf(getKnobValue(4)));
+            view.startValueLbl.setText(String.valueOf(getKnobValue(5)));
+            view.endValueLbl.setText(String.valueOf(getKnobValue(6)));
+            view.sprayValueLbl.setText(String.valueOf(getKnobValue(7)));
+        });
     }
-
     public float getKnobValue(int knobTransmitter) {
         if (knobTransmitter > 0 && knobTransmitter <= knobValues.length) {
             return knobValues[knobTransmitter];
@@ -103,8 +135,19 @@ public class Synth implements Runnable{
             padValues[0] = a[1];
             System.out.println("Active pad is " + padValues[0]);
         }
+        if (a[1] == 0) {
+            setLoopForwards();
+        }
+        if (a[1] == 1){
+            setLoopBackwards();
+        }
+        if (a[1] == 2){
+            setLoopAlternating();
+        }
+        if (a[1] == 3){
+            setReset();
+        }
     }
-
     public int getPadValue() {
         return padValues[0];
     }
@@ -115,8 +158,8 @@ public class Synth implements Runnable{
     public void receiveKeysMidi(byte[] a) {
         keyValues[0] = a[1];
         System.out.println("Key value is set to " + a[1]);
+        setPitch(a[1]);
     }
-
     public float getKeysValue() {
         return keyValues[0];
     }
@@ -124,163 +167,139 @@ public class Synth implements Runnable{
         keyValues[0] = value;
     }
 
-    public FileChooser chooseSampleFile() {
+    // Pitch
+    public void setPitch(float f) {
+        gsp.setPitch(new Static((float) ((f) * (pitchOffset))));
+        System.out.println(spray);
+    }
+    // Grain Size
+    public void setGrainSize(float f){
+        gsp.setGrainSize(new Static((float)((f) * (sizeOffset))));
+    }
+    // Grain Interval
+    public void setGrainInterval(float f){
+        gsp.setGrainInterval(new Static((float)((f) * intervalOffset)));
+    }
+    // Randomness
+    public void setRandomness(float f){
+        gsp.setRandomness( new Static(f));
+    }
+    // Start
+    public void setStart(float f) {
+
+        //gsp.setLoopStart(new Static( (f)*100));
+        if (getKnobValue(5) >= getKnobValue(6)){
+            setKnobValue(6, (int)f);
+            gsp.setLoopStart(new Static((float) ((f) * (loopOffset))));
+        }
+        else{
+            gsp.setLoopStart(new Static((float)((f) * loopOffset)));
+        }
+    }
+
+    // End
+    public void setEnd(float f) {
+        //gsp.setLoopEnd(new Static((f)*100));
+
+        if(getKnobValue(6) <= getKnobValue(5)){
+            setKnobValue(5, (int)f);
+            gsp.setLoopStart(new Static((float) ((f) * (loopOffset))));
+        }
+        else{
+            gsp.setLoopEnd(new Static((float)((f) * loopOffset)));
+        }
+    }
+
+    // Spray
+    public void setSpray(float f){
+        if (getKnobValue(7) > 0) {
+            System.out.println("Spray through if, is set to: " + spray);
+        }
+    }
+    public void setLoopForwards(){
+        gsp.setLoopType(SamplePlayer.LoopType.LOOP_FORWARDS);
+    }
+    public void setLoopBackwards(){
+        gsp.setLoopType(SamplePlayer.LoopType.LOOP_BACKWARDS);
+    }
+    public void setLoopAlternating(){
+        gsp.setLoopType(SamplePlayer.LoopType.LOOP_ALTERNATING);
+    }
+    public void setReset(){
+        gsp.reset();
+    }
+
+    // UPDATE View
+    public void GUIUpdate(Label label, Spinner text, int knob){
+        if(text != null) {
+            if ((Float.valueOf(text.getValue().toString())) >= 0) {
+                try {
+
+                    label.setText(String.valueOf(text.getValue()));
+                    setKnobValue(knob, ((Integer) text.getValue()));
+                }
+                catch(NumberFormatException e){
+                    System.out.println("Please enter a number");
+                }
+                catch(NullPointerException n){
+                    System.out.println("Please enter an integer number");
+                }
+            }
+        }
+        else{
+            System.out.println("Please enter something valid");
+        }
+    }
+    // SAMPLE
+    public FileChooser loadSample(){
         FileChooser fileChooser = new FileChooser();
         fileChooser.getExtensionFilters().addAll(
-                new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.mp3", "*.acac")
+                new FileChooser.ExtensionFilter("Audio Files", "*.wav", "*.acac")
         );
         return fileChooser;
     }
-
-    public void setSample(String filePath) {
+    public String setSample(File file){
         String path = null;
         try {
-            //check if such a file exists
-            File selectedFile = new File(filePath);
-            path = selectedFile.getCanonicalPath();
-            samplePath = filePath;
+            path = file.getCanonicalPath();
+            samplePath = path;
+            sampleReady = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
         System.out.println(path);
+        return path;
     }
+
     public String getSample(){
         return samplePath;
     }
 
-    private GranularSamplePlayer playSample(){
-        ac.stop();
-        ac.out.kill();
-        ac = new AudioContext();
+    public GranularSamplePlayer mountGspSample(){
 
         Sample sourceSample = null;
-        boolean sampleReady = false;
-        // instantiate synth and midikeyboard
-
         try {
-            sourceSample = new Sample(this.getSample());
+            sourceSample = new Sample(getSample());
+            System.out.println("Sample was set to: " + getSample());
             sampleReady = true;
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
-            //System.exit(1);
             sampleReady = false;
         }
-
-        //resize slider - value is in seconds;do it in new thread bc
-        // https://www.reddit.com/r/javahelp/comments/7qvqau/problem_with_updating_gui_javafx/
-        Sample finalSourceSample = sourceSample;
-        Platform.runLater(()->{
-            this.setMaxValue(finalSourceSample.getLength()/1000);
-        });
-
-
-        // instantiate a GranularSamplePlayer
-        GranularSamplePlayer gsp = new GranularSamplePlayer(ac, sourceSample);
-        // connect gsp to ac
+        this.gsp.setSample(sourceSample);
+        gsp.setLoopType(SamplePlayer.LoopType.LOOP_FORWARDS);
+        ac.out.clearInputConnections();
         ac.out.addInput(gsp);
         ac.start();
         return gsp;
     }
 
-    public void updateAudioContext() {
-        newSampleSelected = true;
+    public void pauseSample(){
+        gsp.pause(true);
     }
 
-    @Override
-    public void run() {
-        System.out.println("OVERRIDE HAPPENED");
-
-        // load the source sample from a file
-        this.setSample("C:\\Users\\kaese47\\OneDrive\\Dokumenter\\SourceTree\\SynthFX\\Ring02.wav");
-        gsp = this.playSample();
-
-        // while-loop to configure modifiers live
-        while (gsp != null) {
-            if (newSampleSelected) {
-                //if a new sample is selected, load it and clear the flag
-                gsp = this.playSample();
-                newSampleSelected = false;
-            }
-
-            // KNOBS //
-            // Pitch (Knob 1)
-            if (!pitchToggle) {
-
-            }
-            if (getKeysValue() > 0 && pitchToggle == true) {
-                setKnobValue(1, (int) getKeysValue());
-                setKeysValue(0);
-            }
-
-            if (getKnobValue(1) > 0 && pitchToggle == true) {
-                gsp.setPitch(new Static(ac, (float) (getKnobValue(1) * (pitchOffset))));
-            } else if (getKnobValue(1) == 0) {
-                gsp.setPitch(new Static(1));
-            }
-
-            // Grain size (Knob 2)
-            if (getKnobValue(2) > 0) {
-                gsp.setGrainSize(new Static(ac, (float) (getKnobValue(2) * (sizeOffset))));
-            } else if (getKnobValue(1) == 0) {
-                setKnobValue(1, 63);
-            }
-
-            // Grain interval (Knob 3)
-            if (getKnobValue(3) > 0) {
-                gsp.setGrainInterval(new Static(ac, (float) (getKnobValue(3) * (intervalOffset))));
-            } else if (getKnobValue(3) == 0) {
-                setKnobValue(3, 63);
-            }
-
-            // Random (Knob 4)
-            if (getKnobValue(4) > 0) {
-                gsp.setRandomness(new Static(getKnobValue(4)));
-            } else {
-                setKnobValue(4, 0);
-            }
-            // Spray
-            if (getKnobValue(7) > 0) {
-                Random random = new Random();
-                float max = getKnobValue(7) + 1;
-                int min = 1;
-                spray = random.nextInt((int) ((max - min) * sprayOffset));
-            } else {
-                spray = loopOffset;
-            }
-            // Loop start/end
-            gsp.setLoopStart(new Static((float) ((getKnobValue(5)) * spray)));
-            if (getKnobValue(5) > getKnobValue(6)) {
-                setKnobValue(5, (int) getKnobValue(6) - 1);
-            }
-            gsp.setLoopEnd(new Static((float) ((getKnobValue(6)) * (spray))));
-
-            // PADS
-            switch (getPadValue()) {
-                case 0:
-                    System.out.println("0 has been triggered");
-                    gsp.setLoopType(SamplePlayer.LoopType.LOOP_FORWARDS);
-                    setPadValue(padValueDummy);
-                    break;
-
-                case 1:
-                    System.out.println("1 has been triggered");
-                    gsp.setLoopType(SamplePlayer.LoopType.LOOP_BACKWARDS);
-                    setPadValue(padValueDummy);
-                    break;
-
-                case 2:
-                    System.out.println("2 has been triggered");
-                    gsp.setLoopType(SamplePlayer.LoopType.LOOP_ALTERNATING);
-                    setPadValue(padValueDummy);
-                    break;
-
-                case 3:
-                    System.out.println("3 has been triggered");
-                    gsp.reset();
-                    setPadValue(padValueDummy);
-                    break;
-            }
-        }
+    public void startSample(){
+        gsp.pause(false);
     }
 }

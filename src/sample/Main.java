@@ -3,38 +3,21 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 public class Main extends Application  {
-
     @Override
     public void start(Stage primaryStage) {
-        try{
-            Synth synth = new Synth();
-            MidiKeyboard midiKeyboard = new MidiKeyboard(synth);
-            Controller controller = new Controller(synth);
-            View view = new View(synth, controller);
-            synth.setController(controller);
-            synth.setView(view);
-            synth.setMidiKeyboard(midiKeyboard);
-            primaryStage.setTitle("Grandaddy");
-            primaryStage.setScene(new Scene(view.asParent(), 800, 600));
-            controller.setView(view);
-            primaryStage.show();
+        Synth synth = new Synth();
+        MidiKeyboard midiKeyboard = new MidiKeyboard(synth);
+        Controller controller = new Controller(synth);
+        View view = new View(synth, controller);
+        controller.setView(view);
+        synth.setController(controller);
+        synth.setView(view);
+        synth.setMidiKeyboard(midiKeyboard);
 
-            //new  thread for model
-            Thread thread = new Thread(synth);
-            thread.start();
-
-        }
-        catch (Exception e)
-        {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-        }
+        primaryStage.setTitle("Grandaddy");
+        primaryStage.setScene(new Scene(view.asParent(), 800, 600));
+        primaryStage.show();
     }
     public static void main (String[]args) {launch (args);}{
-    }
-
-    @Override
-    public void stop() {
-        System.exit(0);
     }
 }
