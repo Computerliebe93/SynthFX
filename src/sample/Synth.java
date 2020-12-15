@@ -56,11 +56,12 @@ public class Synth implements Runnable{
     
     //currentValue property
     private final DoubleProperty currentValue = new SimpleDoubleProperty(0.0);
-    public DoubleProperty currentValueProperty() {return currentValue;}
+    public DoubleProperty currentValueProperty() {
+        return currentValue;
+    }
     public final Double getCurrentValueProperty() {return currentValueProperty().get();}
     public final void setCurrentValue(Double currentValue) {
         currentValueProperty().set(currentValue);
-        //TODO: change the value to reflect the slide -> which value should be changed?
     }
 
 
@@ -199,18 +200,31 @@ public class Synth implements Runnable{
             @Override
             protected Void call() throws Exception {
                 while(true) {
-                    setCurrentValue(ac.getTime() / 1000);
+                    Platform.runLater(new Runnable() {
+                        @Override
+                        public void run() {
+                            setCurrentValue(ac.getTime() / 1000);
+                            //double loopTimer = new double[] () {
+                             //   return loopTimer = (ac.getTime() / 1000);
+                            //}
+                            //for(double i = (ac.getTime() / 100) + view.startInput.getValue(); i < view.endInput.getValue(); i+0,1){
+                             //   if (i < view.endInput.getValue() && i > view.startInput.getValue()){
+                             //   setCurrentValue(i);
+                        }
+                    });
                     System.out.println("Inside task");
-                    System.out.println(ac.getTime() / 1000);
+                    System.out.println(getCurrentValueProperty());
                     TimeUnit.MILLISECONDS.sleep(100);
                 }
             }
         };
-        task.run();
+        new Thread (() -> task.run()).start();
 
+        System.out.println("After task run");
 
         // while-loop to configure modifiers live
         while (gsp != null) {
+
             if (newSampleSelected) {
                 //if a new sample is selected, load it and clear the flag
                 gsp = this.playSample();

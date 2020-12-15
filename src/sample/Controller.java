@@ -69,9 +69,9 @@ public class Controller {
         });
 
         //Visualizer
-        view.slider.setOnMouseReleased(
-            event -> model.setCurrentValue(view.slider.getValue())
-        );
+        //view.slider.setOnMouseReleased(
+        //    event -> model.setCurrentValue(view.slider.getValue())
+        //);
 
         // Loop type
         view.selectLoopComb.setOnAction(e -> {
