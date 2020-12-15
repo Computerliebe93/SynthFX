@@ -50,6 +50,50 @@ public class Synth implements Runnable{
     final double loopOffset = 100;
     final int padValueDummy = 10;
 
+
+    public Synth() {
+
+
+        // load the source sample from a file
+        Sample sourceSample = null;
+        try
+        {
+            sourceSample = new Sample("Ring02.wav");
+        }
+        catch(Exception e)
+        {
+            /*
+             * If the program exits with an error message,
+             * then it most likely can't find the file
+             * or can't open it. Make sure it is in the
+             * root folder of your project in Eclipse.
+             * Also make sure that it is a 16-bit,
+             * 44.1kHz audio file. These can be created
+             * using Audacity.
+             */
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+            System.exit(1);
+        }
+
+        // instantiate a GranularSamplePlayer
+        gsp = new GranularSamplePlayer(ac, sourceSample);
+
+        // tell gsp to loop the file
+        gsp.setLoopType(SamplePlayer.LoopType.LOOP_FORWARDS);
+
+
+        // connect gsp to ac
+        ac.out.addInput(gsp);
+
+        // begin audio processing
+        ac.start();
+        System.out.println("Does it reach here*");
+
+
+    }
+
+
     public void setController(Controller controller){
         this.controller = controller;
 
@@ -67,6 +111,28 @@ public class Synth implements Runnable{
             System.out.println("Knob " + a[1] + " value is set to " + knobValues[a[1]]);
         } else {
             System.out.println("Something went wrong");
+        }
+
+        if (a[1] == 1){
+            setPitch(a[2]);
+        }
+        else if (a[1] == 2){
+            setGrainSize(a[2]);
+        }
+        else if (a[1] == 3){
+            setGrainInterval(a[2]);
+        }
+        else if (a[1] == 4){
+            setRandomness(a[2]);
+        }
+        else if (a[1] == 5){
+            setStart(a[2]);
+        }
+        else if (a[1] == 6){
+            setEnd(a[2]);
+        }
+        else if (a[1] == 7){
+            setGrainSize(a[2]);
         }
         Platform.runLater(()-> {
             view.pitchValueLbl.setText(String.valueOf(getKnobValue(1)));
@@ -116,6 +182,48 @@ public class Synth implements Runnable{
         keyValues[0] = value;
     }
 
+    // Pitch
+    public void setPitch(float f){
+        gsp.setPitch( new Static((float)((f) * (pitchOffset))));
+        if(f == 60){
+
+        }
+        else{
+            gsp.getPitchUGen().start();
+        }
+    }
+
+    // Grain Size
+    public void setGrainSize(float f){
+        gsp.setGrainSize( new Static(f));
+
+    }
+
+    // Grain Interval
+    public void setGrainInterval(float f){
+        gsp.setGrainInterval( new Static(f));
+    }
+
+    // Randomness
+    public void setRandomness(float f){
+        gsp.setRandomness( new Static(f));
+    }
+
+    // Start
+    public void setStart(float f){
+        gsp.setLoopStart( new Static(f*10));
+    }
+
+    // End
+    public void setEnd(float f){
+        gsp.setLoopEnd( new Static(f*10));
+    }
+
+    // Spray
+    public void setSpray(float f){
+        //gsp.setSpray( new Static(f));
+    }
+
     // UPDATE View
     public void GUIUpdate(Label label, Spinner text, int knob){
 
@@ -160,7 +268,7 @@ public class Synth implements Runnable{
 
     private GranularSamplePlayer mountGsp(){
 
-        Sample sourceSample = SampleManager.sample("Ring02.wav");
+        Sample sourceSample = null;
 
         try {
             sourceSample = new Sample(getSample());
@@ -179,21 +287,6 @@ public class Synth implements Runnable{
 
     public void threadStart(){
 
-        if(!thread.isAlive()){
-            try {
-                thread.start();
-                System.out.println("Thread started");
-                mountGsp();
-            } catch (IllegalThreadStateException e){
-                System.out.println(e);
-                System.out.println("Thread already started...");
-            }
-        }
-        if(thread.isAlive()){
-            mountGsp();
-            System.out.println("Thread is already alive. Mounting gsp with new sample...");
-        }
-
     }
 
     @Override
@@ -203,7 +296,7 @@ public class Synth implements Runnable{
 
         GranularSamplePlayer gsp  = mountGsp();
 
-        ac.out.addInput(mountGsp());
+        ac.out.addInput(gsp);
         ac.start();
 
         while (sampleReady) {
@@ -218,7 +311,7 @@ public class Synth implements Runnable{
                 setKnobValue(1, (int) getKeysValue());
                 setKeysValue(0);
             }
-            gsp.kill();
+
             if (getKnobValue(1) > 0 && pitchToggle == true) {
                 gsp.setPitch(new Static(ac, (float) (getKnobValue(1) * (pitchOffset))));
             } else if (getKnobValue(1) == 0) {

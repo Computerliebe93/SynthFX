@@ -7,6 +7,7 @@ import javafx.stage.Window;
 import net.beadsproject.beads.data.Sample;
 import net.beadsproject.beads.data.audiofile.FileFormatException;
 import net.beadsproject.beads.data.audiofile.OperationUnsupportedException;
+import net.beadsproject.beads.ugens.Static;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,7 +51,9 @@ public class Controller {
         // ACTUAL PITCH
         view.pitchBtn.setOnAction(e -> {
             model.GUIUpdate(view.pitchValueLbl, view.pitchInput, 1);
-            //model.setKnobValue(1, Integer.valueOf(view.pitchInput.getText()));
+
+            model.setPitch(Float.valueOf(view.pitchValueLbl.getText()));
+
 
         });
         // Grain size button

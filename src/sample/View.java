@@ -52,31 +52,31 @@ public class View {
     Label grainIntervalValueLbl = new Label("0");
     Button grainIntOnBtn = new Button("Grain Interval On");
     Button grainIntervalBtn = new Button("Set Grain Interval");
-    Spinner<Integer> grainIntervalInput = new Spinner(0, 127, 0);
+    Spinner<Integer> grainIntervalInput = new Spinner();
     // Randomness
     Label randomnessNameLbl = new Label("Randomness");
     Label randomnessValueLbl = new Label("0");
     Button randomOnBtn = new Button("Random On");
     Button randomnessBtn = new Button("Set Randomness");
-    Spinner<Integer> randomnessInput = new Spinner(0, 127, 0);
+    Spinner<Integer> randomnessInput = new Spinner();
     // Start point
     Label startNameLbl = new Label("Start");
     Label startValueLbl = new Label("0");
     Button starPointOn = new Button("Start point On");
     Button startBtn = new Button("Set Start");
-    Spinner<Integer> startInput = new Spinner(0, 127, 0);
+    Spinner<Integer> startInput = new Spinner();
     // End point
     Label endNameLbl = new Label("End");
     Label endValueLbl = new Label("0");
     Button endPointOn = new Button("End point On");
     Button endBtn = new Button("Set End");
-    Spinner<Integer> endInput = new Spinner(0, 127, 0);
+    Spinner<Integer> endInput = new Spinner();
     // Spray
     Label sprayNameLbl = new Label("Spray");
     Label sprayValueLbl = new Label("0");
     Button sprayOnBtn = new Button("Spray On");
     Button sprayBtn = new Button("Set Spray");
-    Spinner<Integer> sprayInput = new Spinner(0, 127, 0);
+    Spinner<Integer> sprayInput = new Spinner();
 
     // Unedited buttons
     String loopTypes [] = {"Forwards", "Backwards", "Alternating", "Reset"};
