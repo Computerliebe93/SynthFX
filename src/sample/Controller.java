@@ -113,6 +113,7 @@ public class Controller {
             Window primaryStage = null;
             File selectedFile = model.loadSample().showOpenDialog(primaryStage);
             model.setSample(selectedFile);
+            view.samplePath.setText(model.getSample());
         });
     }
 }

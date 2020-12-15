@@ -49,7 +49,7 @@ public class MidiKeyboard {
                 if (aMsg[0] == -112) {
                     synth.receiveKeysMidi(aMsg);
                 }
-                System.out.println(aMsg[i]);
+                //System.out.println(aMsg[i]);
             }
         }
 

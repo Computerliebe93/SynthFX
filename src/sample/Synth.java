@@ -160,45 +160,57 @@ public class Synth implements Runnable{
 
     private GranularSamplePlayer mountGsp(){
 
-        Sample sourceSample = null;
+        Sample sourceSample = SampleManager.sample("Ring02.wav");
 
         try {
-            sourceSample = new Sample(this.getSample());
+            sourceSample = new Sample(getSample());
+            System.out.println("Sample was set to: " + getSample());
             sampleReady = true;
         } catch (Exception e) {
             System.out.println(e.getMessage());
             e.printStackTrace();
-            //System.exit(1);
             sampleReady = false;
         }
-        GranularSamplePlayer gsp = new GranularSamplePlayer(ac, sourceSample);
 
+        GranularSamplePlayer gsp = new GranularSamplePlayer(ac, sourceSample);
         return gsp;
 
     }
 
     public void threadStart(){
 
-        if (sampleReady){
-
-            thread.start();
-        }else{
-            System.out.println("Please select a sound sample");
+        if(!thread.isAlive()){
+            try {
+                thread.start();
+                System.out.println("Thread started");
+                mountGsp();
+            } catch (IllegalThreadStateException e){
+                System.out.println(e);
+                System.out.println("Thread already started...");
+            }
         }
-    }
+        if(thread.isAlive()){
+            mountGsp();
+            System.out.println("Thread is already alive. Mounting gsp with new sample...");
+        }
 
+    }
 
     @Override
     public void run(){
 
-        this.mountGsp();
-        ac.out.addInput(gsp);
+        System.out.println("RUNNING RUN");
+
+        GranularSamplePlayer gsp  = mountGsp();
+
+        ac.out.addInput(mountGsp());
         ac.start();
 
         while (sampleReady) {
+
+
             // KNOBS //
             // Pitch (Knob 1)
-            System.out.println(gsp.getSample());
             if (!pitchToggle) {
                 gsp.getPitchUGen().pause(true);
             }
