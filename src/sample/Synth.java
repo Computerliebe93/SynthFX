@@ -58,7 +58,7 @@ public class Synth implements Runnable{
         Sample sourceSample = null;
         try
         {
-            sourceSample = new Sample("Ring02.wav");
+            sourceSample = new Sample("dorime.wav");
         }
         catch(Exception e)
         {
@@ -89,7 +89,6 @@ public class Synth implements Runnable{
         // begin audio processing
         ac.start();
         System.out.println("Does it reach here*");
-
 
     }
 
@@ -173,6 +172,7 @@ public class Synth implements Runnable{
     public void receiveKeysMidi(byte[] a) {
         keyValues[0] = a[1];
         System.out.println("Key value is set to " + a[1]);
+        setPitch(a[1]);
     }
 
     public float getKeysValue() {
@@ -183,25 +183,17 @@ public class Synth implements Runnable{
     }
 
     // Pitch
-    public void setPitch(float f){
-        gsp.setPitch( new Static((float)((f) * (pitchOffset))));
-        if(f == 60){
-
+    public void setPitch(float f) {
+            gsp.setPitch(new Static((float) ((f) * (pitchOffset))));
         }
-        else{
-            gsp.getPitchUGen().start();
-        }
-    }
-
     // Grain Size
     public void setGrainSize(float f){
-        gsp.setGrainSize( new Static(f));
-
+        gsp.setGrainSize(new Static((float)((f) * (sizeOffset))));
     }
 
     // Grain Interval
     public void setGrainInterval(float f){
-        gsp.setGrainInterval( new Static(f));
+        gsp.setGrainInterval(new Static((float)((f) * intervalOffset)));
     }
 
     // Randomness
@@ -211,17 +203,27 @@ public class Synth implements Runnable{
 
     // Start
     public void setStart(float f){
-        gsp.setLoopStart( new Static(f*10));
+        if (getKnobValue(5) > getKnobValue(6)) {
+            setKnobValue(5, (int) getKnobValue(6) - 1);
+        }
+        gsp.setLoopStart( new Static((float)((f) * (spray))));
     }
 
     // End
     public void setEnd(float f){
-        gsp.setLoopEnd( new Static(f*10));
+        gsp.setLoopEnd( new Static((float)((f) * (spray))));
     }
 
     // Spray
     public void setSpray(float f){
-        //gsp.setSpray( new Static(f));
+        if (getKnobValue(7) > 0) {
+            Random random = new Random();
+            float max = getKnobValue(7) + 1;
+            int min = 1;
+            spray = random.nextInt((int) ((max - min) * sprayOffset));
+        } else {
+            spray = loopOffset;
+        }
     }
 
     // UPDATE View
