@@ -38,49 +38,42 @@ public class View {
     // Pitch
     Label pitchNameLbl = new Label("Pitch");
     Label pitchValueLbl = new Label("0");
-    ToggleButton pitchOnBtn = new ToggleButton("Pitch On");
     Button pitchBtn = new Button("Set Pitch");
-    Spinner pitchInput = new Spinner(0, 127, 0);
+    Spinner<Float> pitchInput = new Spinner<>(0, 500, 0);
     // GrainSize
     Label grainSizeNameLbl = new Label("GrainSize");
     Label grainSizeValueLbl = new Label("0");
-    ToggleButton grainSizeOnBtn = new ToggleButton("Grain Size On");
     Button grainSizeBtn = new Button("Set Grain");
-    Spinner grainSizeInput = new Spinner(0, 127, 0);
+    Spinner<Float> grainSizeInput = new Spinner<>(0, 500, 0);
     // GrainInterval
     Label grainIntervalNameLbl = new Label("GrainInterval");
     Label grainIntervalValueLbl = new Label("0");
-    ToggleButton grainIntOnBtn = new ToggleButton("Grain Interval On");
     Button grainIntervalBtn = new Button("Set Grain Interval");
-    Spinner<Integer> grainIntervalInput = new Spinner();
+    Spinner<Float> grainIntervalInput = new Spinner<>(0, 500, 0);
     // Randomness
     Label randomnessNameLbl = new Label("Randomness");
     Label randomnessValueLbl = new Label("0");
-    ToggleButton randomOnBtn = new ToggleButton("Random On");
     Button randomnessBtn = new Button("Set Randomness");
-    Spinner<Integer> randomnessInput = new Spinner();
+    Spinner<Float> randomnessInput = new Spinner<>(0, 500, 0);
     // Start point
     Label startNameLbl = new Label("Start");
     Label startValueLbl = new Label("0");
-    ToggleButton startPointOnBtn = new ToggleButton("Start point On");
     Button startBtn = new Button("Set Start");
-    Spinner<Integer> startInput = new Spinner();
+    Spinner<Float> startInput = new Spinner<>(0, 500, 0);
     // End point
     Label endNameLbl = new Label("End");
     Label endValueLbl = new Label("0");
-    ToggleButton endPointOnBtn = new ToggleButton("End point On");
     Button endBtn = new Button("Set End");
-    Spinner<Integer> endInput = new Spinner();
+    Spinner<Float> endInput = new Spinner<>(0, 500, 0);
     // Spray
     Label sprayNameLbl = new Label("Spray");
     Label sprayValueLbl = new Label("0");
-    ToggleButton sprayOnBtn = new ToggleButton("Spray On");
     Button sprayBtn = new Button("Set Spray");
-    Spinner<Integer> sprayInput = new Spinner();
+    Spinner<Integer> sprayInput = new Spinner<>(0, 500, 0);
 
     // Unedited buttons
     String loopTypes [] = {"Forwards", "Backwards", "Alternating", "Reset"};
-    ComboBox<String> selectLoopComb = new ComboBox(FXCollections.observableArrayList(loopTypes));
+    ComboBox<String> selectLoopComb = new ComboBox<>(FXCollections.observableArrayList(loopTypes));
 
 
     private void createAndConfigure(){
@@ -114,7 +107,6 @@ public class View {
         pitchInput.setMaxSize(60, 10);
         pitchInput.setEditable(true);
         Grid.add(pitchInput, 2, 6);
-        Grid.add(pitchOnBtn,1, 6);
         Grid.add(pitchBtn, 2, 7);
         pitchValueLbl.setMinWidth(40);
         pitchValueLbl.setMaxWidth(40);
@@ -124,7 +116,6 @@ public class View {
         grainSizeInput.setMaxSize(60, 20);
         grainSizeInput.setEditable(true);
         Grid.add(grainSizeInput, 2, 9);
-        Grid.add(grainSizeOnBtn,1,9);
         Grid.add(grainSizeBtn, 2, 10);
         Grid.add(grainSizeValueLbl, 3, 9);
         grainSizeValueLbl.setMinWidth(40);
@@ -134,7 +125,6 @@ public class View {
         grainIntervalInput.setMaxSize(60, 20);
         grainIntervalInput.setEditable(true);
         Grid.add(grainIntervalInput, 2, 12);
-        Grid.add(grainIntOnBtn, 1, 12);
         Grid.add(grainIntervalBtn, 2, 13);
         grainIntervalValueLbl.setMinWidth(40);
         grainIntervalValueLbl.setMaxWidth(40);
@@ -144,7 +134,6 @@ public class View {
         randomnessInput.setMaxSize(60, 20);
         randomnessInput.setEditable(true);
         Grid.add(randomnessInput, 2, 15);
-        Grid.add(randomOnBtn,1,15);
         Grid.add(randomnessBtn, 2, 16);
         randomnessValueLbl.setMinWidth(40);
         randomnessValueLbl.setMaxWidth(40);
@@ -154,7 +143,6 @@ public class View {
         startInput.setMaxSize(60, 20);
         startInput.setEditable(true);
         Grid.add(startInput, 5, 6);
-        Grid.add(startPointOnBtn,4,6);
         Grid.add(startBtn, 5, 7);
         startValueLbl.setMinWidth(40);
         startValueLbl.setMaxWidth(40);
@@ -164,7 +152,6 @@ public class View {
         endInput.setMaxSize(60, 20);
         endInput.setEditable(true);
         Grid.add(endInput, 5, 9);
-        Grid.add(endPointOnBtn, 4,9);
         Grid.add(endBtn, 5, 10);
         endValueLbl.setMinWidth(40);
         endValueLbl.setMaxWidth(40);
@@ -174,7 +161,6 @@ public class View {
         sprayInput.setMaxSize(60,20);
         sprayInput.setEditable(true);
         Grid.add(sprayInput,5,12);
-        Grid.add(sprayOnBtn, 4,12);
         Grid.add(sprayBtn,5,13);
         Grid.add(sprayValueLbl, 6,12);
 

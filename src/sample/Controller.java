@@ -36,55 +36,48 @@ public class Controller {
             }
         });
 
-
-        // Pitch
-        view.pitchOnBtn.setOnAction(e ->{
-            if(view.pitchOnBtn.isSelected()){
-                model.pitchToggle = true;
-            }
-            else if (!view.pitchOnBtn.isSelected()){
-                model.pitchToggle = false;
-            }
-        });
-
-
-        // ACTUAL PITCH
+        // Pitch button
         view.pitchBtn.setOnAction(e -> {
             model.GUIUpdate(view.pitchValueLbl, view.pitchInput, 1);
-
             model.setPitch(Float.valueOf(view.pitchValueLbl.getText()));
-
-
         });
+
         // Grain size button
         view.grainSizeBtn.setOnAction(e -> {
             model.GUIUpdate(view.grainSizeValueLbl, view.grainSizeInput, 2);
+            model.setGrainSize(Float.valueOf(view.grainSizeValueLbl.getText()));
         });
+
         // Grain interval
         view.grainIntervalBtn.setOnAction(e -> {
-            view.grainIntervalValueLbl.setText(view.grainIntervalInput.getValue().toString());
-            model.setKnobValue(3, view.grainIntervalInput.getValue());
+            model.GUIUpdate(view.grainIntervalValueLbl, view.grainIntervalInput, 3);
+            model.setGrainInterval(Float.valueOf(view.grainIntervalValueLbl.getText()));
         });
+
         // Randomness
         view.randomnessBtn.setOnAction(e -> {
-            view.randomnessValueLbl.setText(view.randomnessInput.getValue().toString());
-            model.setKnobValue(4, view.randomnessInput.getValue());
+            model.GUIUpdate(view.randomnessValueLbl, view.randomnessInput, 4);
+            model.setRandomness(Float.valueOf(view.randomnessValueLbl.getText()));
         });
+
         // Start point
         view.startBtn.setOnAction(e -> {
-                view.startValueLbl.setText(view.startInput.getValue().toString());
-                model.setKnobValue(5, view.startInput.getValue());
+            model.GUIUpdate(view.startValueLbl, view.startInput, 5);
+            model.setStart(Float.valueOf(view.startValueLbl.getText()));
         });
+
         // End point
         view.endBtn.setOnAction(e -> {
-            view.endValueLbl.setText(view.endInput.getValue().toString());
-            model.setKnobValue(6, view.endInput.getValue());
+            model.GUIUpdate(view.endValueLbl, view.endInput, 6);
+            model.setEnd(Float.valueOf(view.endValueLbl.getText()));
         });
+
         //Spray
         view.sprayBtn.setOnAction(e -> {
-            view.sprayValueLbl.setText(view.sprayInput.getValue().toString());
-            model.setKnobValue(7, view.sprayInput.getValue());
+            model.GUIUpdate(view.sprayValueLbl, view.sprayInput, 7);
+            model.setSpray(Float.valueOf(view.sprayValueLbl.getText()));
         });
+
         // Loop type
         view.selectLoopComb.setOnAction(e -> {
             switch(view.selectLoopComb.getValue()) {
