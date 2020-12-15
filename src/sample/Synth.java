@@ -184,8 +184,9 @@ public class Synth implements Runnable{
 
     // Pitch
     public void setPitch(float f) {
-            gsp.setPitch(new Static((float) ((f) * (pitchOffset))));
-        }
+        gsp.setPitch(new Static((float) ((f) * (pitchOffset))));
+
+    }
     // Grain Size
     public void setGrainSize(float f){
         gsp.setGrainSize(new Static((float)((f) * (sizeOffset))));
@@ -202,28 +203,33 @@ public class Synth implements Runnable{
     }
 
     // Start
-    public void setStart(float f){
-        if (getKnobValue(5) > getKnobValue(6)) {
-            setKnobValue(5, (int) getKnobValue(6) - 1);
-        }
-        gsp.setLoopStart( new Static((float)((f) * (spray))));
+    public void setStart(float f) {
+       if (getKnobValue(5) >= getKnobValue(6)){
+           setKnobValue(6, (int)f);
+       }else{
+           gsp.setLoopStart(new Static((float) ((f) * (spray))));
+       }
     }
 
     // End
-    public void setEnd(float f){
-        gsp.setLoopEnd( new Static((float)((f) * (spray))));
+    public void setEnd(float f) {
+        if(getKnobValue(6) <= getKnobValue(5)){
+            setKnobValue(5, (int)f);
+        }else{
+        gsp.setLoopStart(new Static((float) ((f) * (spray))));
+        }
     }
 
     // Spray
     public void setSpray(float f){
-        if (getKnobValue(7) > 0) {
+        /*if (getKnobValue(7) > 0) {
             Random random = new Random();
             float max = getKnobValue(7) + 1;
             int min = 1;
             spray = random.nextInt((int) ((max - min) * sprayOffset));
         } else {
             spray = loopOffset;
-        }
+        }*/
     }
 
     // UPDATE View
