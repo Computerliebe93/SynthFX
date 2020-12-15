@@ -1,16 +1,9 @@
 package sample;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
 import javafx.event.Event;
 import javafx.scene.control.Label;
 import javafx.stage.Window;
-import net.beadsproject.beads.data.Sample;
-import net.beadsproject.beads.data.audiofile.FileFormatException;
-import net.beadsproject.beads.data.audiofile.OperationUnsupportedException;
-import net.beadsproject.beads.ugens.Static;
-
 import java.io.File;
-import java.io.IOException;
 
 public class Controller {
     Synth model;
@@ -22,61 +15,63 @@ public class Controller {
     public void setView(View view) {
         view.exitBtn.setOnAction(e -> Platform.exit());
         view.exitBtn.setOnAction(e -> System.exit(0));
-
-
-
-        //TEST
-        view.playBtn.setOnAction(e ->{
-
-            if(model.samplePath != null) {
-                model.threadStart();
+        // Pitch
+        view.pitchOnBtn.setOnAction(e ->{
+            if(view.pitchOnBtn.isSelected()){
+                model.pitchToggle = true;
             }
-            else{
-                System.out.println("Please select a sound sample");
+            else if (!view.pitchOnBtn.isSelected()){
+                model.pitchToggle = false;
             }
         });
-
+        view.updatePlease.setOnAction(e ->{
+            view.pitchValueLbl.setText(String.valueOf(model.getKnobValue(1)));
+        });
+        view.printPitch.setOnAction(e -> {
+            System.out.println("Synth pitch is set to: " + model.getKnobValue(1));
+            System.out.println(model.getSample());
+        });
         // Pitch button
         view.pitchBtn.setOnAction(e -> {
-            model.GUIUpdate(view.pitchValueLbl, view.pitchInput, 1);
-            model.setPitch(Float.valueOf(view.pitchValueLbl.getText()));
-        });
+            view.pitchValueLbl.setText(view.pitchInput.getValue().toString());
+            model.setKnobValue(1, view.pitchInput.getValue());
 
+        });
         // Grain size button
         view.grainSizeBtn.setOnAction(e -> {
-            model.GUIUpdate(view.grainSizeValueLbl, view.grainSizeInput, 2);
-            model.setGrainSize(Float.valueOf(view.grainSizeValueLbl.getText()));
+            view.grainSizeValueLbl.setText(view.grainSizeInput.getValue().toString());
+            model.setKnobValue(2, view.grainSizeInput.getValue());
         });
-
         // Grain interval
         view.grainIntervalBtn.setOnAction(e -> {
-            model.GUIUpdate(view.grainIntervalValueLbl, view.grainIntervalInput, 3);
-            model.setGrainInterval(Float.valueOf(view.grainIntervalValueLbl.getText()));
+            view.grainIntervalValueLbl.setText(view.grainIntervalInput.getValue().toString());
+            model.setKnobValue(3, view.grainSizeInput.getValue());
         });
-
         // Randomness
         view.randomnessBtn.setOnAction(e -> {
-            model.GUIUpdate(view.randomnessValueLbl, view.randomnessInput, 4);
-            model.setRandomness(Float.valueOf(view.randomnessValueLbl.getText()));
+            view.randomnessValueLbl.setText(view.randomnessInput.getValue().toString());
+            model.setKnobValue(4, view.randomnessInput.getValue());
         });
-
         // Start point
         view.startBtn.setOnAction(e -> {
-            model.GUIUpdate(view.startValueLbl, view.startInput, 5);
-            model.setStart(Float.valueOf(view.startValueLbl.getText()));
+            view.startValueLbl.setText(view.startInput.getValue().toString());
+            model.setKnobValue(5, view.startInput.getValue());
         });
-
         // End point
         view.endBtn.setOnAction(e -> {
-            model.GUIUpdate(view.endValueLbl, view.endInput, 6);
-            model.setEnd(Float.valueOf(view.endValueLbl.getText()));
+            view.endValueLbl.setText(view.endInput.getValue().toString());
+            model.setKnobValue(6, view.endInput.getValue());
         });
-
         //Spray
         view.sprayBtn.setOnAction(e -> {
-            model.GUIUpdate(view.sprayValueLbl, view.sprayInput, 7);
-            model.setSpray(Float.valueOf(view.sprayValueLbl.getText()));
+            view.sprayValueLbl.setText(view.sprayInput.getValue().toString());
+            model.setKnobValue(7, view.sprayInput.getValue());
         });
+
+        //Visualizer
+        view.slider.setOnMouseReleased(
+            event -> model.setCurrentValue(view.slider.getValue())
+        );
 
         // Loop type
         view.selectLoopComb.setOnAction(e -> {
@@ -107,9 +102,16 @@ public class Controller {
         // Select sample
         view.sampleLoadbtn.setOnAction( e ->{
             Window primaryStage = null;
-            File selectedFile = model.loadSample().showOpenDialog(primaryStage);
-            model.setSample(selectedFile);
-            view.samplePath.setText(model.getSample());
+            File selectedFile = model.chooseSampleFile().showOpenDialog(primaryStage);
+            if(selectedFile != null){
+                model.setSample(selectedFile.getPath());
+                model.updateAudioContext();
+            }
+
         });
+
+
+
+
     }
 }
