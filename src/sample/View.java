@@ -38,49 +38,42 @@ public class View {
     // Pitch
     Label pitchNameLbl = new Label("Pitch");
     Label pitchValueLbl = new Label("0");
-    ToggleButton pitchOnBtn = new ToggleButton("Pitch On");
     Button pitchBtn = new Button("Set Pitch");
-    Spinner pitchInput = new Spinner(0, 127, 0);
+    Spinner<Float> pitchInput = new Spinner<>(0, 500, 0);
     // GrainSize
     Label grainSizeNameLbl = new Label("GrainSize");
     Label grainSizeValueLbl = new Label("0");
-    Button grainSizeOnBtn = new Button("Grain Size On");
     Button grainSizeBtn = new Button("Set Grain");
-    Spinner grainSizeInput = new Spinner(0, 127, 0);
+    Spinner<Float> grainSizeInput = new Spinner<>(0, 500, 0);
     // GrainInterval
     Label grainIntervalNameLbl = new Label("GrainInterval");
     Label grainIntervalValueLbl = new Label("0");
-    Button grainIntOnBtn = new Button("Grain Interval On");
     Button grainIntervalBtn = new Button("Set Grain Interval");
-    Spinner<Integer> grainIntervalInput = new Spinner();
+    Spinner<Float> grainIntervalInput = new Spinner<>(0, 500, 0);
     // Randomness
     Label randomnessNameLbl = new Label("Randomness");
     Label randomnessValueLbl = new Label("0");
-    Button randomOnBtn = new Button("Random On");
     Button randomnessBtn = new Button("Set Randomness");
-    Spinner<Integer> randomnessInput = new Spinner();
+    Spinner<Float> randomnessInput = new Spinner<>(0, 500, 0);
     // Start point
     Label startNameLbl = new Label("Start");
     Label startValueLbl = new Label("0");
-    Button starPointOn = new Button("Start point On");
     Button startBtn = new Button("Set Start");
-    Spinner<Integer> startInput = new Spinner();
+    Spinner<Float> startInput = new Spinner<>(0, 500, 0);
     // End point
     Label endNameLbl = new Label("End");
     Label endValueLbl = new Label("0");
-    Button endPointOn = new Button("End point On");
     Button endBtn = new Button("Set End");
-    Spinner<Integer> endInput = new Spinner();
+    Spinner<Float> endInput = new Spinner<>(0, 500, 0);
     // Spray
     Label sprayNameLbl = new Label("Spray");
     Label sprayValueLbl = new Label("0");
-    Button sprayOnBtn = new Button("Spray On");
     Button sprayBtn = new Button("Set Spray");
-    Spinner<Integer> sprayInput = new Spinner();
+    Spinner<Integer> sprayInput = new Spinner<>(0, 500, 0);
 
     // Unedited buttons
     String loopTypes [] = {"Forwards", "Backwards", "Alternating", "Reset"};
-    ComboBox<String> selectLoopComb = new ComboBox(FXCollections.observableArrayList(loopTypes));
+    ComboBox<String> selectLoopComb = new ComboBox<>(FXCollections.observableArrayList(loopTypes));
 
 
     private void createAndConfigure(){
@@ -114,7 +107,6 @@ public class View {
         pitchInput.setMaxSize(60, 10);
         pitchInput.setEditable(true);
         Grid.add(pitchInput, 2, 6);
-        Grid.add(pitchOnBtn,1, 6);
         Grid.add(pitchBtn, 2, 7);
         pitchValueLbl.setMinWidth(40);
         pitchValueLbl.setMaxWidth(40);
