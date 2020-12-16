@@ -112,9 +112,6 @@ public class Controller {
                 view.samplePath.setText(model.getSample());
                 model.updateAudioContext();
             }
-
-            //model.setSample(selectedFile);
-            //view.samplePath.setText(model.getSample());
         });
     }
 }

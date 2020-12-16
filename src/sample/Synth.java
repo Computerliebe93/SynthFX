@@ -32,7 +32,6 @@ public class Synth implements Runnable {
     MidiKeyboard midiKeyboard;
     Controller controller;
     View view;
-    //boolean sampleReady = false;//??
 
 
     // Knob offsets
@@ -90,22 +89,6 @@ public class Synth implements Runnable {
         this.midiKeyboard = midiKeyboard;
     }
 
-/*    public Synth() {
-
-        Sample sourceSample = null;
-
-        try {
-            sourceSample = new Sample("C:\\Users\\kaese47\\OneDrive\\Dokumenter\\SourceTree\\SynthFX\\Ring02.wav");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-            System.exit(1);
-        }
-
-    }*/
-
-
-
 
     // SAMPLE
     public FileChooser chooseSampleFile() {
@@ -123,12 +106,10 @@ public class Synth implements Runnable {
             File selectedFile = new File(filePath);
             path = selectedFile.getCanonicalPath();
             samplePath = filePath;
-            //sampleReady = true;
         } catch (IOException e) {
             e.printStackTrace();
         }
         System.out.println(path);
-        //return path;??
     }
 
     public String getSample() {
@@ -136,7 +117,7 @@ public class Synth implements Runnable {
     }
 
     public GranularSamplePlayer mountGspSample() {
-
+        // Creates a new audiocontext if new nr chosen
         ac.stop();
         ac.out.kill();
         ac = new AudioContext();
@@ -161,49 +142,39 @@ public class Synth implements Runnable {
         });
 
         // instantiate a GranularSamplePlayer
-
-        // tell gsp to loop the file
         gsp = new GranularSamplePlayer(ac, sourceSample);
+        // tell gsp to loop the file
         gsp.setLoopType(SamplePlayer.LoopType.LOOP_FORWARDS);
-
         // connect gsp to ac
         ac.out.addInput(gsp);
-
         // begin audio processing
-        //ac.start();
         System.out.println("Does it reach here*");
-
         this.gsp.setSample(sourceSample);
         gsp.setLoopType(SamplePlayer.LoopType.LOOP_FORWARDS);
-        ac.out.clearInputConnections();//??
+        //ac.out.clearInputConnections();
         ac.out.addInput(gsp);
         ac.start();
         return gsp;
 
 
-
     }
-
 
 
     public void updateAudioContext() {
         newSampleSelected = true;
-    }//??
+    }
 
     public void pauseSample() {
         gsp.pause(true);
     }
-    public void startSample () {
+
+    public void startSample() {
         gsp.pause(false);
     }
 
     @Override
     public void run() {
         System.out.println("OVERRIDE HAPPENED");
-
-        // load the source sample from a file
-        //this.setSample("C:\\Users\\kaese47\\OneDrive\\Dokumenter\\SourceTree\\SynthFX\\Sinus.wav");
-        //gsp = this.mountGspSample();
 
         Task<Void> task = new Task<Void>() {
             @Override
@@ -240,13 +211,11 @@ public class Synth implements Runnable {
                             System.out.println("Current counter value 2 " + currentValueCounter[0]);
 
                             var newValue = currentValueCounter[0] - (getMaxValueProperty() * maxTimeCounter[0]);
-                            setCurrentValue(newValue + getMaxValueProperty());
+                            setCurrentValue(newValue);
                             System.out.println("Setting current counter to" + newValue);
 
                         }
                     });
-                    //System.out.println("Inside task");
-                    //System.out.println();
                     TimeUnit.MILLISECONDS.sleep(100);
                 }
             }
@@ -256,7 +225,7 @@ public class Synth implements Runnable {
         System.out.println("After task run");
 
         // while-loop to configure modifiers live
-        //while (gsp != null) {
+        while (gsp != null) {
 
             if (newSampleSelected) {
                 //if a new sample is selected, load it and clear the flag
@@ -265,7 +234,7 @@ public class Synth implements Runnable {
             }
 
 
-        //}
+        }
     }
 
     // KNOB
@@ -426,8 +395,6 @@ public class Synth implements Runnable {
         gsp.reset();
     }
 
-
-
     // UPDATE View
     public void GUIUpdate(Label label, Spinner text, int knob) {
         if (text != null) {
@@ -446,8 +413,4 @@ public class Synth implements Runnable {
             System.out.println("Please enter something valid");
         }
     }
-
-
-
-
-    }
+}
