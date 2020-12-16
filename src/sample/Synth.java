@@ -10,6 +10,7 @@ import javafx.scene.control.Spinner;
 import javafx.scene.control.TextArea;
 import javafx.stage.FileChooser;
 import net.beadsproject.beads.core.AudioContext;
+import net.beadsproject.beads.core.TimeStamp;
 import net.beadsproject.beads.core.UGen;
 import net.beadsproject.beads.data.Sample;
 import net.beadsproject.beads.data.SampleManager;
@@ -23,6 +24,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
+
+import static net.beadsproject.beads.ugens.SamplePlayer.LoopType.*;
 
 public class Synth implements Runnable {
     private float[] knobValues = new float[9];
@@ -48,6 +51,7 @@ public class Synth implements Runnable {
 
     // maxvalue property
     private final DoubleProperty maxValue = new SimpleDoubleProperty(0.0);
+    private SamplePlayer.LoopType loopDirection;
 
     public DoubleProperty maxValueProperty() {
         return maxValue;
@@ -117,7 +121,7 @@ public class Synth implements Runnable {
     }
 
     public GranularSamplePlayer mountGspSample() {
-        // Creates a new audiocontext if new nr chosen
+        // Creates a new audiocontext if new sample chosen
         ac.stop();
         ac.out.kill();
         ac = new AudioContext();
@@ -144,13 +148,13 @@ public class Synth implements Runnable {
         // instantiate a GranularSamplePlayer
         gsp = new GranularSamplePlayer(ac, sourceSample);
         // tell gsp to loop the file
-        gsp.setLoopType(SamplePlayer.LoopType.LOOP_FORWARDS);
+        setLoopForwards();
         // connect gsp to ac
         ac.out.addInput(gsp);
         // begin audio processing
         System.out.println("Does it reach here*");
         this.gsp.setSample(sourceSample);
-        gsp.setLoopType(SamplePlayer.LoopType.LOOP_FORWARDS);
+        setLoopForwards();
         //ac.out.clearInputConnections();
         ac.out.addInput(gsp);
         ac.start();
@@ -179,41 +183,14 @@ public class Synth implements Runnable {
         Task<Void> task = new Task<Void>() {
             @Override
             protected Void call() throws Exception {
-                //initialize a current value counter to count time up to max time
-                final double[] currentValueCounter = {0.0};
-                //initialize a max times counter which counts how many times you have went over
-                //set max times counter to 1
-                final int[] maxTimeCounter = {0};
-
-
                 while (true) {
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            //set current value counter to getTime()
-                            //check if the current value counter is >= the max time
-                            //IF YES
-                            //encreses max times counter with 1
-                            //set current value to (ac.getTime - (maxTime() * maxTimesCounter)
-                            //IF NO
-                            //???
-                            currentValueCounter[0] = (ac.getTime() / 1000);
-                            System.out.println("Current counter value" + currentValueCounter[0]);
-
-                            boolean isAtEnd = currentValueCounter[0] >= (maxTimeCounter[0] * getMaxValueProperty());
-
-                            if (isAtEnd) {
-                                System.out.println("Max time counter " + maxTimeCounter[0]);
-                                maxTimeCounter[0] = maxTimeCounter[0] + 1;
-                                isAtEnd = false;
-
+                            if (gsp != null) {
+                                System.out.println("Position value is " + gsp.getPosition()/1000);
+                                setCurrentValue(gsp.getPosition()/1000);
                             }
-                            System.out.println("Current counter value 2 " + currentValueCounter[0]);
-
-                            var newValue = currentValueCounter[0] - (getMaxValueProperty() * maxTimeCounter[0]);
-                            setCurrentValue(newValue);
-                            System.out.println("Setting current counter to" + newValue);
-
                         }
                     });
                     TimeUnit.MILLISECONDS.sleep(100);
@@ -380,15 +357,18 @@ public class Synth implements Runnable {
     }
 
     public void setLoopForwards() {
-        gsp.setLoopType(SamplePlayer.LoopType.LOOP_FORWARDS);
+        loopDirection = LOOP_FORWARDS;
+        gsp.setLoopType(loopDirection);
     }
 
     public void setLoopBackwards() {
-        gsp.setLoopType(SamplePlayer.LoopType.LOOP_BACKWARDS);
+        loopDirection = LOOP_BACKWARDS;
+        gsp.setLoopType(loopDirection);
     }
 
     public void setLoopAlternating() {
-        gsp.setLoopType(SamplePlayer.LoopType.LOOP_ALTERNATING);
+        loopDirection = LOOP_ALTERNATING;
+        gsp.setLoopType(loopDirection);
     }
 
     public void setReset() {
