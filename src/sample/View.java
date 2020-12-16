@@ -1,5 +1,6 @@
 package sample;
 
+import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.geometry.Insets;
 import javafx.scene.Parent;
@@ -76,6 +77,10 @@ public class View {
     // Unedited buttons
     String loopTypes [] = {"Forwards", "Backwards", "Alternating", "Reset"};
     ComboBox<String> selectLoopComb = new ComboBox<>(FXCollections.observableArrayList(loopTypes));
+
+    //Visualizer
+    Slider slider = new Slider(0, 100, 50);
+    Label sliderNameLbl = new Label("Progress bar");
 
 
     private void createAndConfigure(){
@@ -162,6 +167,33 @@ public class View {
 
         // Exit
         Grid.add(exitBtn, 21, 20);
+
+        // Visualizer
+        Grid.add(slider, 21, 11);
+        Grid.add(sliderNameLbl,21, 10);
+
+        //maxValue
+        Label sliderMaxValueLbl  = new Label();
+        sliderMaxValueLbl.textProperty().bind(
+                Bindings.format(
+                        "Max value: %.2f",
+                        model.maxValueProperty()
+                )
+        );
+        slider.maxProperty().bind(model.maxValueProperty());
+        Grid.add(sliderMaxValueLbl, 21,13);
+
+
+        //Current value label
+        Label sliderValueLbl  = new Label();
+        sliderValueLbl.textProperty().bind(
+                Bindings.format(
+                        "Current value: %.2f",
+                        model.currentValueProperty()
+                )
+        );
+        slider.valueProperty().bindBidirectional(model.currentValueProperty());
+        Grid.add(sliderValueLbl, 21,12);
 
     }
     public Parent asParent() {

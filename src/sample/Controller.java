@@ -1,16 +1,8 @@
 package sample;
 import javafx.application.Platform;
-import javafx.collections.ObservableList;
-import javafx.event.Event;
-import javafx.scene.control.Label;
 import javafx.stage.Window;
-import net.beadsproject.beads.data.Sample;
-import net.beadsproject.beads.data.audiofile.FileFormatException;
-import net.beadsproject.beads.data.audiofile.OperationUnsupportedException;
-import net.beadsproject.beads.ugens.Static;
 
 import java.io.File;
-import java.io.IOException;
 
 public class Controller {
     Synth model;
@@ -114,9 +106,15 @@ public class Controller {
         // Select sample
         view.sampleLoadbtn.setOnAction( e ->{
             Window primaryStage = null;
-            File selectedFile = model.loadSample().showOpenDialog(primaryStage);
-            model.setSample(selectedFile);
-            view.samplePath.setText(model.getSample());
+            File selectedFile = model.chooseSampleFile().showOpenDialog(primaryStage);
+            if(selectedFile != null){
+                model.setSample(selectedFile.getPath());
+                view.samplePath.setText(model.getSample());
+                model.updateAudioContext();
+            }
+
+            //model.setSample(selectedFile);
+            //view.samplePath.setText(model.getSample());
         });
     }
 }

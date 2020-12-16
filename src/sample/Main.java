@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 public class Main extends Application  {
     @Override
     public void start(Stage primaryStage) {
+        try{
         Synth synth = new Synth();
         MidiKeyboard midiKeyboard = new MidiKeyboard(synth);
         Controller controller = new Controller(synth);
@@ -17,7 +18,22 @@ public class Main extends Application  {
         primaryStage.setTitle("Grandaddy");
         primaryStage.setScene(new Scene(view.asParent(), 800, 600));
         primaryStage.show();
+
+            //new  thread for model
+            Thread thread = new Thread(synth);
+            thread.start();
+
+        }
+        catch (Exception e)
+        {
+            System.out.println(e.getMessage());
+            e.printStackTrace();
+        }
     }
     public static void main (String[]args) {launch (args);}{
+    }
+    @Override
+    public void stop() {
+        System.exit(0);
     }
 }
